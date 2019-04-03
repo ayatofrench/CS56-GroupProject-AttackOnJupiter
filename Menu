@@ -13,6 +13,7 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -21,17 +22,19 @@ import javafx.scene.input.MouseEvent;
 
 public class AoJStart extends Application 
 {
-	public Stage backUpWindow; //used to access windows outside the main
-	public Scene backUpScene; //used to access the scene outside the main
-	public Stage quitWindow = new Stage(); //window for quit screen
-	public Stage htpWindow = new Stage();//window for how to play( creating a window so that user can refer to controls while playing)
+	private Stage backUpWindow; //used to access windows outside the main
+	private Scene backUpScene; //used to access the scene outside the main
+	private Stage quitWindow = new Stage(); //window for quit screen
+	private Stage htpWindow = new Stage();//window for how to play( creating a window so that user can refer to controls while playing)
+	private Character lisa = new Character();
+	private VBox backUpPane = new VBox();
 	
 	@Override
 	public void start(Stage primaryStage)//window stuff
 	{
 		backUpWindow = primaryStage;//Possibly binds the two stages
 		
-    Font font = new Font("Times New Roman", 30);
+		Font font = new Font("Times New Roman", 30);
 		GridPane pane = new GridPane();//Pane for main menu
 		pane.setAlignment(Pos.CENTER);
 		pane.setVgap(15); //Sets vertical gap between nodes inside a pane
@@ -40,25 +43,25 @@ public class AoJStart extends Application
 		          BackgroundSize.DEFAULT); //
 		
 		//Creating buttons
-    //Play Button with its properties
+		//Play Button with its properties
 		Button btnPlay = new Button("Play");
 		btnPlay.setStyle("-fx-border-color: deeppink; -fx-background-color: pink;");
 		btnPlay.setTextFill(Color.DEEPPINK);
 		btnPlay.setFont(font);
 		
-    //How to Play button with its properties
+		//How to Play button with its properties
 		Button btnHTP = new Button("How to play");
 		btnHTP.setStyle("-fx-border-color: deeppink; -fx-background-color: pink;");
 		btnHTP.setTextFill(Color.DEEPPINK);
 		btnHTP.setFont(font);
 		
-    //Credits Button with its properties
+		//Credits Button with its properties
 		Button btnCredits = new Button("Credits");
 		btnCredits.setStyle("-fx-border-color: deeppink; -fx-background-color: pink;");
 		btnCredits.setTextFill(Color.DEEPPINK);
 		btnCredits.setFont(font);
 		
-    //Quit Button with its properties
+		//Quit Button with its properties
 		Button btnQuit = new Button("Quit");
 		btnQuit.setStyle("-fx-border-color: deeppink; -fx-background-color: pink;");
 		btnQuit.setTextFill(Color.DEEPPINK);
@@ -83,7 +86,7 @@ public class AoJStart extends Application
 		btnPlay.setOnMouseClicked(this :: processPlay);
 		btnHTP.setOnMouseClicked(this :: processHTP);
 
-    //Programming for credits button handled inside main, could have been done either way
+		//Programming for credits button handled inside main, could have been done either way
 		btnCredits.setOnAction(new EventHandler<ActionEvent>() 
 		{
             @Override
@@ -93,31 +96,31 @@ public class AoJStart extends Application
 						  BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
 				      BackgroundSize.DEFAULT);
             	
-              VBox creditPane = new VBox();
+            	VBox creditPane = new VBox();
             	creditPane.setBackground(new Background(image));
             	
-              Scene credits = new Scene(creditPane, scene.getWidth(), 582);
+            	Scene credits = new Scene(creditPane, scene.getWidth(), 582);
             	creditPane.setAlignment(Pos.BOTTOM_CENTER);
             	Font CreditFont = new Font("Comic Sans MS", 25);
             	
-              //made 2 labels for names due to formatting issues
+            	//made 2 labels for names due to formatting issues
             	Label names1 = new Label("Shant"+"\n"+"Zak"+"\n"+"Ryoto"+"\n");
             	names1.setOpacity(.5);
             	names1.setTextFill(Color.CYAN);
             	names1.setFont(CreditFont);
             	creditPane.getChildren().add(names1);
-              Label names = new Label("   Alex"+"\n"+"   Ayoto"+"\n"+"   Apurav"+"\n"+"   Donovan");
+            	Label names = new Label("   Alex"+"\n"+"   Ayoto"+"\n"+"   Apurav"+"\n"+"   Donovan");
             	names.setOpacity(.5);
             	names.setTextFill(Color.MEDIUMSLATEBLUE);
             	names.setFont(CreditFont);
             	creditPane.getChildren().add(names);
             	
-              primaryStage.setTitle("Credits");
+            	primaryStage.setTitle("Credits");
             	primaryStage.setScene(credits);
             	primaryStage.show();
             	
-              //button to for going back to main menu
-              Button btnBack = new Button("Go Back to Main Menu");
+            	//button to for going back to main menu
+            	Button btnBack = new Button("Go Back to Main Menu");
             	btnBack.setAlignment(Pos.BOTTOM_CENTER);
             	btnBack.setOpacity(.5);
             	btnBack.setStyle("-fx-border-color: black; -fx-background-color: darkslateblue;");
@@ -126,7 +129,7 @@ public class AoJStart extends Application
             	creditPane.getChildren().add(btnBack);
            		btnBack.setAlignment(Pos.BOTTOM_RIGHT);
                
-              //button action
+           		//button action
            		btnBack.setOnAction(new EventHandler<ActionEvent>()
            		{
            			@Override
@@ -142,15 +145,16 @@ public class AoJStart extends Application
 	
 	public void processPlay(MouseEvent e)
 	{
-		VBox pane = new VBox();
 		Font font = new Font("Times New Roman", 25);
 		BackgroundImage image = new BackgroundImage(new Image("file:Pictures/AoJPlayUnderDev.jpg"), 
 				BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
 		          BackgroundSize.DEFAULT);
-		pane.setAlignment(Pos.CENTER);
-		pane.setBackground(new Background(image));
+		VBox resetPlay = new VBox();
+		backUpPane = resetPlay;
+		backUpPane.setAlignment(Pos.CENTER);
+		backUpPane.setBackground(new Background(image));
 		
-    //Formatting back to main menu button (btnMenu)
+		//Formatting back to main menu button (btnMenu)
 		Button btnMenu = new Button("Back to Main Menu");
 		btnMenu.setFont(font);
 		btnMenu.setStyle("-fx-border-color: lightsteelblue; -fx-background-color: black");
@@ -158,18 +162,25 @@ public class AoJStart extends Application
 		btnMenu.setFont(font);
 		btnMenu.setOpacity(.75);
 		
-    //Place holder to show that we haven't developed the back-end processes
+		//Place holder to show that we haven't developed the back-end processes
 		Label lblPlay = new Label("Path under development");
 		lblPlay.setFont(font);
 		lblPlay.setTextFill(Color.LIGHTSTEELBLUE);
 		
-		pane.getChildren().addAll(lblPlay, btnMenu);
+		backUpPane.getChildren().addAll(lblPlay, btnMenu);
 		
-		Scene playScene = new Scene(pane, backUpScene.getWidth(), backUpScene.getHeight());
+		lisa.setHealth(120);
+		lisa.setHeight(100);
+		lisa.setWidth(100);
+		lisa.setFill(Color.BLUE);
+		backUpPane.getChildren().add(lisa);
+		lisa.setOnMouseClicked(this :: processDamaged);
+		
+		Scene playScene = new Scene(backUpPane, backUpScene.getWidth(), backUpScene.getHeight());
 		backUpWindow.setScene(playScene);
 		backUpWindow.centerOnScreen();
 		backUpWindow.show();
-		
+
 		btnMenu.setOnAction(new EventHandler<ActionEvent>()
 		{
 			@Override
@@ -184,7 +195,9 @@ public class AoJStart extends Application
 	
 	public void processHTP (MouseEvent e)
 	{
-        BackgroundImage imageBG = new BackgroundImage(new Image("https://i.ytimg.com/vi/5Ork84zGLIk/maxresdefault.jpg"), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
+		BackgroundImage imageBG = new BackgroundImage(new Image("file:Pictures/aojscreenplay.gif"), 
+				  BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+		      BackgroundSize.DEFAULT);
         VBox htpPane=new VBox();
         Scene htpScene=new Scene(htpPane,1100,582);
         htpWindow.setScene(htpScene);
@@ -220,14 +233,14 @@ public class AoJStart extends Application
 		fPane.setHgap(5);
 		fPane.setAlignment(Pos.BOTTOM_CENTER);
 		
-    //no button for confirming quit
+		//no button for confirming quit
 		Button btnNo = new Button("No");
 		btnNo.setStyle("-fx-border-color: darkorange; -fx-background-color: coral");
 		btnNo.setFont(font);
 		btnNo.setOpacity(.5);
 		btnNo.setTextFill(Color.BLACK);
 		
-    //yes button for confirming quit
+		//yes button for confirming quit
 		Button btnYes = new Button("Yes");
 		btnYes.setStyle("-fx-border-color: darkorange; -fx-background-color: coral");
 		btnYes.setFont(font);
@@ -254,6 +267,17 @@ public class AoJStart extends Application
 	public void processCancelQuit(MouseEvent e)
 	{
 		quitWindow.close();
+	}
+	
+	public void processDamaged(MouseEvent e)
+	{
+		int dmg = 20;
+		lisa.reduceHealth(dmg);
+		
+		if (!lisa.isAlive())
+		{
+			backUpPane.getChildren().remove(lisa);
+		}
 	}
 	
 	public static void main(String[] args) 
