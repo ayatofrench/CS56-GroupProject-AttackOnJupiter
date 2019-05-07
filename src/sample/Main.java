@@ -28,6 +28,8 @@ public class Main extends Application {
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(scene);
 
+        Circle bullet = new Circle(10);
+
         Rectangle circ = new Rectangle(50, 50);
         circ.getStyleClass().add("my-circ");
         circ.setY(0.0);
@@ -59,13 +61,15 @@ public class Main extends Application {
         new AnimationTimer() {
             public void handle(long currentNanoTime) {
 
-                double t = (currentNanoTime - startNanoTime) / 1000000000.0;
+//                double t = (currentNanoTime - startNanoTime) / 1000000000.0;
+//
+//                double x = 232 + 128 * Math.cos(t);
+//                double y = 232 + 128 * Math.sin(t);
+//
+//                circ.setX(x);
+//                circ.setY(y);
 
-                double x = 232 + 128 * Math.cos(t);
-                double y = 232 + 128 * Math.sin(t);
-
-                circ.setX(x);
-                circ.setY(y);
+                bullet.setCenterY(bullet.getCenterY() - 1);
 
                 if(input.contains("LEFT")) {
                     rect.setX(rect.getX() - 1);
@@ -78,6 +82,11 @@ public class Main extends Application {
                 }
                 if(input.contains(("DOWN"))) {
                     rect.setY(rect.getY() + 1);
+                }
+                if(input.contains("SPACE")) {
+                    bullet.setCenterY(rect.getY());
+                    bullet.setCenterX(rect.getX());
+                    ((Group)scene.getRoot()).getChildren().add(bullet);
                 }
 
                 if(getBoundary(circ.getX(), circ.getY(), 50, 50).intersects(getBoundary(rect.getX(), rect.getY(), 50, 50))){
