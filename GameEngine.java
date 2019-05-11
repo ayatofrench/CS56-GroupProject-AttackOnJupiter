@@ -106,7 +106,10 @@ public class GameEngine {
             if(input.contains("SPACE")) {
                 lisa.jump();
             }
-
+            
+            if (input.contains("F12"))
+            	Main.getStage().setFullScreen(true);
+            
             if(input.contains("P")) {
                 pauseGame();
             }
@@ -202,6 +205,7 @@ public class GameEngine {
 	      			public void handle(ActionEvent event) 
 	      			{
 	      				Main.getStage().setScene(scene);
+	      				Main.getStage().setFullScreen(true);
 	      			}
 	      		});
 	      });
