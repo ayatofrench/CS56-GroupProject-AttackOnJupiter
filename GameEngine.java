@@ -38,7 +38,8 @@ public class GameEngine {
     double gravity = 0;
     double prevPos = 0;
 
-     public GameEngine() {
+     public GameEngine() 
+     {
 
         gamePane = new GamePane();
         startPane = new StartMenuPane();
@@ -85,8 +86,10 @@ public class GameEngine {
      }
 
 
-    public AnimationTimer gameLoop() {
-        return gameLoop = new AnimationTimer() {
+    public AnimationTimer gameLoop() 
+    {
+        return gameLoop = new AnimationTimer() 
+        {
             @Override
             public void handle(long now) {
                 lisa.handleMovement(input);
@@ -95,7 +98,8 @@ public class GameEngine {
         };
     }
 
-    private void keyListener() {
+    private void keyListener() 
+    {
 
         gameScene.setOnKeyPressed((event) -> {
             String code = event.getCode().toString();
@@ -179,7 +183,7 @@ public class GameEngine {
 	       	names1.setTextFill(Color.CYAN);
 	       	names1.setFont(CreditFont);
 	       	creditPane.getChildren().add(names1);
-	       	Label names = new Label("   Alex"+"\n"+"   Ayoto"+"\n"+"   Apurav"+"\n"+"   Donovan");
+	       	Label names = new Label("      Alex"+"\n"+"      Ayoto"+"\n"+"      Apurav"+"\n"+"      Donovan");
 	       	names.setOpacity(.5);
 	       	names.setTextFill(Color.MEDIUMSLATEBLUE);
 	       	names.setFont(CreditFont);
