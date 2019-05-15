@@ -1,4 +1,4 @@
-package application;
+package AoJGame;
 
 import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
@@ -18,25 +18,24 @@ import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-public class GameEngine {
+public class GameEngine 
+{
 
     private GamePane gamePane;
     private StartMenuPane startPane;
     private Scene scene;
     private Scene gameScene;
-
     private AnimationTimer gameLoop;
-
-    Rectangle2D primaryScreenBounds = Screen.getPrimary().getBounds();
+    private Rectangle2D primaryScreenBounds = Screen.getPrimary().getBounds();
     private final double GROUNDLEVEL = primaryScreenBounds.getHeight()*(.84);
     private Rectangle ground = new Rectangle();
     private ArrayList<String> input;
-    Rectangle background = new Rectangle(primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
+    private Rectangle background = new Rectangle(primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
     private RangedCharacter lisa = new RangedCharacter();
     private NPC enemy = new NPC();
     private boolean paused = false;
-    double gravity = 0;
-    double prevPos = 0;
+    private double gravity = 0;
+    private double prevPos = 0;
 
      public GameEngine() 
      {
@@ -66,9 +65,6 @@ public class GameEngine {
          
          //Initialize ground
          createGround();
-         
-         //Initialize textures
-         createTextures();
 
          //Give character game instance
          lisa.setGame(this);
@@ -85,8 +81,7 @@ public class GameEngine {
          Main.getStage().setFullScreen(true);
      }
 
-
-    public AnimationTimer gameLoop() 
+     public AnimationTimer gameLoop() 
     {
         return gameLoop = new AnimationTimer() 
         {
@@ -98,28 +93,31 @@ public class GameEngine {
         };
     }
 
-    private void keyListener() 
-    {
+     private void keyListener() 
+     {
+        gameScene.setOnKeyPressed((event) -> 
+        {
+        	String code = event.getCode().toString();
+        
+        	if(!input.contains(code))
+                	input.add(code);
+            
+        	if (lisa.isShooting() && input.contains("RIGHT"))
+            	input.remove(code);
 
-        gameScene.setOnKeyPressed((event) -> {
-            String code = event.getCode().toString();
-
-            if(!input.contains(code))
-                input.add(code);
-
-            if(input.contains("SPACE")) {
+        	if(input.contains("SPACE")) {
                 lisa.jump();
-            }
+        	}
             
-            if (input.contains("F12"))
-            	Main.getStage().setFullScreen(true);
+        	if (input.contains("F12"))
+        		Main.getStage().setFullScreen(true);
             
-            if(input.contains("P")) {
-                pauseGame();
-            }
+        	if(input.contains("P")) {
+        		pauseGame();
+        	}
             
-            lisa.setPrevXPos(lisa.getX());
-        });
+        lisa.setPrevXPos(lisa.getX());
+    });
 
         gameScene.setOnKeyReleased((event) -> {
             String code = event.getCode().toString();
@@ -129,7 +127,7 @@ public class GameEngine {
         });
     }
 
-    private void btnListener() {
+     private void btnListener() {
          startPane.getPlayButton().setOnMouseClicked((event) -> {
             initGame();
          });
@@ -259,7 +257,7 @@ public class GameEngine {
          }));
     }
 
-    public void pauseGame() {
+     public void pauseGame() {
         if(!paused) {
             gameLoop.stop();
             paused = true;
@@ -270,22 +268,15 @@ public class GameEngine {
         }
     }
 
-    private void createSetting()
+     private void createSetting()
     {
-    	Image setting = new Image("file:Pictures/back.gif");
+    	Image setting = new Image("file:Pictures/back_day.gif");
         ImagePattern settingP = new ImagePattern(setting);
         background.setFill(settingP);
     }
     
-    private void createTextures()
+     private void createGround() 
     {
-    	Image archerRight = new Image("file:Pictures/lisa_range_right.gif");
-        ImagePattern archerRightP = new ImagePattern(archerRight);
-        lisa.setFill(archerRightP);
-    }
-    
-    private void createGround() {
-
         ground.setFill(Color.BLACK);
         ground.setStroke(Color.ORANGE);
         ground.setOpacity(0);
@@ -296,15 +287,22 @@ public class GameEngine {
 
     }
 
-    public Scene getScene() {
+     public Scene getScene() 
+    {
         return scene;
     }
 
-    public Rectangle getGround() {
+     public GamePane getGamePane()
+     {
+    	 return this.gamePane;
+     }
+     
+     public Rectangle getGround() 
+    {
          return ground;
     }
     
-    public Rectangle getSetting()
+     public Rectangle getSetting()
     {
     	return this.background;
     }
