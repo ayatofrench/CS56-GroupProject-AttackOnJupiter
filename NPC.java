@@ -1,4 +1,4 @@
-package application;
+package AoJGame;
 
 import java.util.ArrayList;
 
@@ -16,7 +16,6 @@ public class NPC extends Character
     private ImagePattern archerLeftP = new ImagePattern(archerLeft);
     private Image archerRight = new Image("file:Pictures/lisa_range_right.gif");
     private ImagePattern archerRightP = new ImagePattern(archerRight);
-    private int maxPosition;
     
     public NPC()
     {
@@ -32,18 +31,17 @@ public class NPC extends Character
 		xFinal = (int)(Math.random()*((maxPosition  + 1)));
 		this.setDirection("left");
     	checkXFinal(this);
-    	this.setStroke(Color.RED);
+    	//this.setStroke(Color.RED);
     	moving = true;
     }
 	@Override
 	public void handleMovement(ArrayList input)
 	{
-        System.out.println("xFinal is: " + xFinal);
+        //System.out.println("xFinal is: " + xFinal);
 		 
 		if (moving)
      	{
 			actionNum = (int)(Math.random()*(200) + 1);
-	    	//System.out.println(actionNum);
 	    	if (actionNum == 5)
 	    		jumping = true;
 	    	
@@ -61,7 +59,7 @@ public class NPC extends Character
      			this.setX(this.getX() - this.getMovementSpeed() * time);
      		}
      		
-     		System.out.println("Enemy's x-position is: " + this.getX() + "\nEnemy's direction is: " + this.getDirection());
+     		//System.out.println("Enemy's x-position is: " + this.getX() + "\nEnemy's direction is: " + this.getDirection());
      		
      		if (xFinal == this.getX())
      		{	
@@ -87,29 +85,30 @@ public class NPC extends Character
 		
 		if (jumping) 
         {
+			
         	//Simulating gravity so the character falls down after jumping
             this.setY(this.getY() - 10 + gravity);
             gravity += GRAVITAIONALFORCE;
             
             //If the character's y is equal to the ground's y
-           if(this.getY() + this.getHeight() > game.getGround().getY()) 
-           {
-               gravity = 0;
-               jumping = false;
+            if( (this.getY() + this.getHeight() ) > game.getGround().getY()) 
+            {
+            	gravity = 0;
+            	jumping = false;
                
-               if (this.getDirection().equalsIgnoreCase("left"))
-            	   this.setFill(archerLeftP);
+            	if (this.getDirection().equalsIgnoreCase("left"))
+            		this.setFill(archerLeftP);
                
-               if (this.getDirection().equalsIgnoreCase("right"))
-            	   this.setFill(archerRightP);
-           }
+            	if (this.getDirection().equalsIgnoreCase("right"))
+            		this.setFill(archerRightP);
+            }
         }
 		
-    	if ((this.getX() < 0))
+    	if (this.getX() < 0)
     	{
     		this.setDirection("right");
     		this.setX(0);    
-    		xFinal = (int)(Math.random()*((maxPosition + 1)));
+    		xFinal = (int)(Math.random()*( (maxPosition + 1) ) );
     		checkXFinal(this);
     		this.setFill(archerRightP);
         }
@@ -126,22 +125,22 @@ public class NPC extends Character
 		if (this.getY() < 0)
     		this.setY(0);
 		
-		if (((this.getY()) + (this.getHeight())) > (game.getGround().getY() - game.getGround().getHeight()))
+		if ( (this.getY() + this.getHeight() ) > (game.getGround().getY() - game.getGround().getHeight()))
         	this.setY(game.getGround().getY() - (this.getHeight()));
 	}
 	
 	private void checkXFinal(Character enemy)
 	{
-		while (( enemy.getDirection().equalsIgnoreCase("right") ) && ( xFinal < enemy.getX() ))
+		while ( (enemy.getDirection().equalsIgnoreCase("right") ) && (xFinal < enemy.getX() ))
     		xFinal = (int)(Math.random()*((maxPosition  + 1)));
     	
-    	while (( enemy.getDirection().equalsIgnoreCase("left") ) && ( xFinal > enemy.getX() ))
+    	while ( (enemy.getDirection().equalsIgnoreCase("left") ) && (xFinal > enemy.getX() ))
     		xFinal = (int)(Math.random()*((maxPosition  + 1)));
     	
     	while (xFinal > maxPosition)
     		xFinal = maxPosition;
     	
-    	while((xFinal % 5) != 0)
+    	while( (xFinal % 5) != 0)
     		xFinal--;
     	
 	}
