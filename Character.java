@@ -1,4 +1,4 @@
-package application;
+package AoJGame;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
@@ -17,13 +17,17 @@ public class Character extends Rectangle
     protected final float GRAVITAIONALFORCE = 0.5f;
     protected float gravity;
     protected boolean jumping = false;
-    private final int MOVEMENTSPEED = 5;
-    private String direction;
-    private Image archerLeft = new Image("file:Pictures/lisa_range_left.gif");
-    private ImagePattern archerLeftP = new ImagePattern(archerLeft);
-    private Image archerRight = new Image("file:Pictures/lisa_range_right.gif");
-    private ImagePattern archerRightP = new ImagePattern(archerRight);
-    private double prevXPos;
+    protected final int MOVEMENTSPEED = 5;
+    protected String direction;
+    protected Image archerLeft = new Image("file:Pictures/lisa_range_left.gif");
+    protected ImagePattern archerLeftP = new ImagePattern(archerLeft);
+    protected Image archerRight = new Image("file:Pictures/lisa_range_right.gif");
+    protected ImagePattern archerRightP = new ImagePattern(archerRight);
+    protected Image archerAttackRight = new Image("file:Pictures/lisa_attack_right.gif");
+    protected ImagePattern archerAttackRightP = new ImagePattern(archerAttackRight);
+    protected double prevXPos;
+    protected int maxPosition;
+    protected boolean shooting = false;
     
     public Character() 
     {
@@ -101,6 +105,12 @@ public class Character extends Rectangle
     		this.setFill(archerLeftP);
     	}
     	
+    	if(input.contains("RIGHT"))
+    	{
+    		System.out.println("____________________________________________________________________________________");
+    		
+    	}
+    	
         if(input.contains("A"))
         {
         	this.setX(this.getX() - MOVEMENTSPEED);
@@ -110,12 +120,25 @@ public class Character extends Rectangle
         {
         	this.setX(this.getX() + MOVEMENTSPEED);
         }
+        
+        if (input.contains("RIGHT"))
+        {
+        	this.setFill(archerAttackRightP);
+        	shooting = true;
+        }
+        
+        if (shooting)
+        {
+        	shooting = false;
+        }
 
-        if(jumping) {
+        if(jumping) 
+        {
             this.setY(this.getY() - 10 + gravity);
             gravity += GRAVITAIONALFORCE;
 
-            if(this.getY() + this.getHeight() > game.getGround().getY()) {
+            if(this.getY() + this.getHeight() > game.getGround().getY()) 
+            {
                 gravity = 0;
                 jumping = false;
             }
@@ -135,11 +158,12 @@ public class Character extends Rectangle
 
         }
 
-        if ((this.getX() > (game.getScene().getWidth() - this.getWidth())))
-            this.setX(game.getScene().getWidth() - this.getWidth());
+        if (this.getX() > maxPosition)
+            this.setX(maxPosition);
     }
 
-    public void setGame(GameEngine game) {
+    public void setGame(GameEngine game) 
+    {
         this.game = game;
     }
 
@@ -149,4 +173,3 @@ public class Character extends Rectangle
     }
 
 }
-
