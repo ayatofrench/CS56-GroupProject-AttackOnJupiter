@@ -1,32 +1,42 @@
-package application;
+package AoJGame;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.stage.Screen;
 
-public class StartMenuPane extends GridPane {
+
+public class StartMenuPane extends Group {
 
     private GameEngine game;
-
     private Button btnPlay;
     private Button btnQuit;
     private Button btnCredits;
     private Button btnHTP;
+    private Rectangle2D primaryScreenBounds = Screen.getPrimary().getBounds();
+    private Rectangle background = new Rectangle(primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
 
-    public StartMenuPane() {
+    public StartMenuPane() 
+    {
         Font font = new Font("Times New Roman", 30);
-        this.setAlignment(Pos.CENTER);
-        this.setVgap(15); //Sets vertical gap between nodes inside a pane
-        BackgroundImage image = new BackgroundImage(new Image("file:Pictures/AttackOnJavaJupiterMenu.jpg"),
-                BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-                BackgroundSize.DEFAULT); //
+        
+        //Creating background image
+        background.setWidth(primaryScreenBounds.getWidth());
+        background.setHeight(primaryScreenBounds.getHeight());
+        Image setting = new Image("file:Pictures/AttackOnJavaJupiterMenu.jpg");
+        ImagePattern settingP = new ImagePattern(setting);
+        background.setFill(settingP);
 
         //Creating buttons
         //Play Button with its properties
@@ -34,33 +44,35 @@ public class StartMenuPane extends GridPane {
         btnPlay.setStyle("-fx-border-color: deeppink; -fx-background-color: pink;");
         btnPlay.setTextFill(Color.DEEPPINK);
         btnPlay.setFont(font);
-
+        btnPlay.setLayoutX(primaryScreenBounds.getWidth() / 2.25);
+        btnPlay.setLayoutY(primaryScreenBounds.getHeight() * .3);
+        
         //How to Play button with its properties
         btnHTP = new Button("How to play");
         btnHTP.setStyle("-fx-border-color: deeppink; -fx-background-color: pink;");
         btnHTP.setTextFill(Color.DEEPPINK);
         btnHTP.setFont(font);
+        btnHTP.setLayoutX(primaryScreenBounds.getWidth() / 2.25);
+        btnHTP.setLayoutY(primaryScreenBounds.getHeight() * .4);
 
         //Credits Button with its properties
         btnCredits = new Button("Credits");
         btnCredits.setStyle("-fx-border-color: deeppink; -fx-background-color: pink;");
         btnCredits.setTextFill(Color.DEEPPINK);
         btnCredits.setFont(font);
+        btnCredits.setLayoutX(primaryScreenBounds.getWidth() / 2.25);
+        btnCredits.setLayoutY(primaryScreenBounds.getHeight() * .5);
 
         //Quit Button with its properties
         btnQuit = new Button("Quit");
         btnQuit.setStyle("-fx-border-color: deeppink; -fx-background-color: pink;");
         btnQuit.setTextFill(Color.DEEPPINK);
         btnQuit.setFont(font);
+        btnQuit.setLayoutX(primaryScreenBounds.getWidth() / 2.25);
+        btnQuit.setLayoutY(primaryScreenBounds.getHeight() * .6);
 
         //Adding nodes to the pane
-        this.setBackground(new Background(image));
-        this.add(btnPlay, 0, 0);
-        this.add(btnHTP, 0, 1);
-        this.add(btnCredits, 0, 2);
-        this.add(btnQuit, 0, 3);
-
-
+        this.getChildren().addAll(background, btnPlay, btnHTP, btnCredits, btnQuit);
     }
 
     public Button getPlayButton() 
@@ -83,7 +95,8 @@ public class StartMenuPane extends GridPane {
         return btnQuit;
     }
 
-    public void setGameEngine(GameEngine game) {
+    public void setGameEngine(GameEngine game) 
+    {
         this.game = game;
     }
 
