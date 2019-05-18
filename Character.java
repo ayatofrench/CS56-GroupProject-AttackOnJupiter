@@ -19,8 +19,10 @@ public class Character extends Rectangle
     protected boolean jumping = false;
     protected final int MOVEMENTSPEED = 5;
     protected String direction;
-    protected Image archerLeft = new Image("file:Pictures/lisa_range_left.gif");
+    
+    protected Image archerLeft = new Image("file:Pictures/lisa_range/lisa_range_left.gif");
     protected ImagePattern archerLeftP = new ImagePattern(archerLeft);
+    
     protected Image archerRight = new Image("file:Pictures/lisa_range_right.gif");
     protected ImagePattern archerRightP = new ImagePattern(archerRight);
     protected Image archerAttackRight = new Image("file:Pictures/lisa_attack_right.gif");
@@ -105,12 +107,6 @@ public class Character extends Rectangle
     		this.setFill(archerLeftP);
     	}
     	
-    	if(input.contains("RIGHT"))
-    	{
-    		System.out.println("____________________________________________________________________________________");
-    		
-    	}
-    	
         if(input.contains("A"))
         {
         	this.setX(this.getX() - MOVEMENTSPEED);
@@ -119,17 +115,6 @@ public class Character extends Rectangle
         if(input.contains(("D")))
         {
         	this.setX(this.getX() + MOVEMENTSPEED);
-        }
-        
-        if (input.contains("RIGHT"))
-        {
-        	this.setFill(archerAttackRightP);
-        	shooting = true;
-        }
-        
-        if (shooting)
-        {
-        	shooting = false;
         }
 
         if(jumping) 
@@ -173,3 +158,4 @@ public class Character extends Rectangle
     }
 
 }
+
