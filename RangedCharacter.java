@@ -20,6 +20,7 @@ public class RangedCharacter extends Character
     private Image bulletLeft = new Image("file:Pictures/arrow_left.png");
     private ImagePattern bulletLeftP = new ImagePattern(bulletLeft);
     private Projectile proj;
+    public int sleepTime = 0;
 	 
 	public RangedCharacter()
 	{
@@ -79,9 +80,15 @@ public class RangedCharacter extends Character
         
         if (input.contains("RIGHT"))
         {
-        	this.setDirection("Right");
-        	this.setFill(archerAttackRightP);
-        	this.shoot();
+        
+        	if (sleepTime == 0)
+        	{ 
+        		this.setDirection("Right");
+            	this.setFill(archerAttackRightP);
+            	this.shoot();
+            	sleepTime = 2000;
+        	}
+        	
         }
         
         if (input.contains("LEFT"))
@@ -125,6 +132,8 @@ public class RangedCharacter extends Character
         		game.getGamePane().getChildren().remove(proj);
         		shooting = false;
         	}
+        	
+        	//game.getGamePane().getChildren().remove(proj);
         }
 
         if(jumping) 
