@@ -14,24 +14,24 @@ public class NPC extends Character
 	private int time;
 	private int xFinal;
 	private boolean moving = false;
-	private Image archerLeft = new Image("file:Pictures/lisa_range_left.gif");
-    private ImagePattern archerLeftP = new ImagePattern(archerLeft);
-    private Image archerRight = new Image("file:Pictures/lisa_range_right.gif");
-    private ImagePattern archerRightP = new ImagePattern(archerRight);
-    private Image bulletRight = new Image("file:Pictures/arrow_right.png");
-    private ImagePattern bulletRightP = new ImagePattern(bulletRight);
-    private Image bulletLeft = new Image("file:Pictures/arrow_left.png");
-    private ImagePattern bulletLeftP = new ImagePattern(bulletLeft);
+	private Image metaManLeft = new Image("file:Pictures/metaman_left.gif");
+    private ImagePattern metaManLeftP = new ImagePattern(metaManLeft);
+    private Image metaManRight = new Image("file:Pictures/metaman_left.gif");
+    private ImagePattern metaManRightP = new ImagePattern(metaManRight);
+    private Image worm_right = new Image("file:Pictures/worm_right.gif");
+    private ImagePattern wormRightP = new ImagePattern(worm_right);
+    private Image worm_left = new Image("file:Pictures/worm_left.gif");
+    private ImagePattern wormLeftP = new ImagePattern(worm_left);
     
     public NPC()
     {
-    	this.setFill(archerLeftP);
+    	this.setFill(metaManLeftP);
     	this.setHealth(120);
-		this.setWidth((int)(primaryScreenBounds.getWidth() * .15));
+		this.setWidth((int)(primaryScreenBounds.getWidth() * .2));
 		maxPosition = (int)(primaryScreenBounds.getWidth() - this.getWidth());
 		while(maxPosition % 5 != 0)
 			maxPosition--;
-		this.setHeight(primaryScreenBounds.getHeight()*(.25));
+		this.setHeight(primaryScreenBounds.getHeight()*(.3));
 		this.setX(maxPosition);
 		this.setY(primaryScreenBounds.getHeight()*(.84) - this.getHeight());
 		xFinal = (int)(Math.random()*((maxPosition  + 1)));
@@ -52,13 +52,13 @@ public class NPC extends Character
 	    {
 			if (proj.getDirection().equalsIgnoreCase("right"))
 			{
-				proj.setFill(bulletRightP);
+				proj.setFill(wormRightP);
 	        	proj.launchRight();
 	        }
 	        	
 			if (proj.getDirection().equalsIgnoreCase("left"))
 	        {
-	        	proj.setFill(bulletLeftP);
+	        	proj.setFill(wormLeftP);
 	        	proj.launchLeft();
 	        }
 	        	
@@ -98,11 +98,11 @@ public class NPC extends Character
      		if (this.getDirection().equalsIgnoreCase("right"))
      		{
      			this.setX(this.getX() + this.getMovementSpeed() * time);
-     			this.setFill(archerRightP);
+     			this.setFill(metaManRightP);
      		}
      		if (this.getDirection().equalsIgnoreCase("left"))
      		{
-     			this.setFill(archerLeftP);
+     			this.setFill(metaManLeftP);
      			this.setX(this.getX() - this.getMovementSpeed() * time);
      		}
      		
@@ -116,7 +116,7 @@ public class NPC extends Character
      				System.out.println("===============Here===================");
      				this.setDirection("left");
      				checkXFinal(this);
-         			this.setFill(archerLeftP);
+         			this.setFill(metaManLeftP);
          		}
          		
      			else if (this.getDirection().equalsIgnoreCase("left"))
@@ -125,7 +125,7 @@ public class NPC extends Character
          			System.out.println("===============Here===================");
          			this.setDirection("right");
          			checkXFinal(this);
-         			this.setFill(archerRightP);
+         			this.setFill(metaManRightP);
          		}
      		}
      	}
@@ -144,10 +144,10 @@ public class NPC extends Character
             	jumping = false;
                
             	if (this.getDirection().equalsIgnoreCase("left"))
-            		this.setFill(archerLeftP);
+            		this.setFill(metaManLeftP);
                
             	if (this.getDirection().equalsIgnoreCase("right"))
-            		this.setFill(archerRightP);
+            		this.setFill(metaManRightP);
             }
         }
 		
@@ -157,7 +157,7 @@ public class NPC extends Character
     		this.setX(0);    
     		xFinal = (int)(Math.random()*( (maxPosition + 1) ) );
     		checkXFinal(this);
-    		this.setFill(archerRightP);
+    		this.setFill(metaManRightP);
         }
 		
 		if (this.getX() > maxPosition)
@@ -166,7 +166,7 @@ public class NPC extends Character
     		this.setX(maxPosition);
     		xFinal = (int)(Math.random()*((maxPosition + 1)));
     		checkXFinal(this);
-    		this.setFill(archerLeftP);
+    		this.setFill(metaManLeftP);
     	}
 		
 		if (this.getY() < 0)
