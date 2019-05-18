@@ -9,6 +9,8 @@ import javafx.scene.paint.ImagePattern;
 public class NPC extends Character
 {
 	private int actionNum;
+	private Projectile proj;
+	private int shootNum;
 	private int time;
 	private int xFinal;
 	private boolean moving = false;
@@ -16,6 +18,10 @@ public class NPC extends Character
     private ImagePattern archerLeftP = new ImagePattern(archerLeft);
     private Image archerRight = new Image("file:Pictures/lisa_range_right.gif");
     private ImagePattern archerRightP = new ImagePattern(archerRight);
+    private Image bulletRight = new Image("file:Pictures/arrow_right.png");
+    private ImagePattern bulletRightP = new ImagePattern(bulletRight);
+    private Image bulletLeft = new Image("file:Pictures/arrow_left.png");
+    private ImagePattern bulletLeftP = new ImagePattern(bulletLeft);
     
     public NPC()
     {
@@ -38,7 +44,48 @@ public class NPC extends Character
 	public void handleMovement(ArrayList input)
 	{
         //System.out.println("xFinal is: " + xFinal);
-		 
+		shootNum = (int)(Math.random()*(200) + 1);
+		if (shootNum == 5)
+			this.shoot();
+			
+		if (shooting)
+	    {
+			if (proj.getDirection().equalsIgnoreCase("right"))
+			{
+				proj.setFill(bulletRightP);
+	        	proj.launchRight();
+	        }
+	        	
+			if (proj.getDirection().equalsIgnoreCase("left"))
+	        {
+	        	proj.setFill(bulletLeftP);
+	        	proj.launchLeft();
+	        }
+	        	
+	        	/*if(getBoundary(lisa.getX(), lisa.getY(), lisa.getWidth(), 
+	        			lisa.getHeight()).intersects(getBoundary(enemy.getX(), enemy.getY(), enemy.getWidth(), enemy.getHeight())))
+	        	{
+	        		if (lisa.getX() > enemy.getX())
+	        			lisa.setX(enemy.getX() + enemy.getWidth());
+	        		if (lisa.getX() < enemy.getX())
+	        			lisa.setX(enemy.getX() - enemy.getWidth());
+	        	}*/
+	        	
+	        	if (proj.getX() > primaryScreenBounds.getWidth() - proj.getWidth())
+	        	{
+	        		game.getGamePane().getChildren().remove(proj);
+	        		shooting = false;
+	        	}
+	        	
+	        	if (proj.getX() < 0)
+	        	{
+	        		game.getGamePane().getChildren().remove(proj);
+	        		shooting = false;
+	        	}
+	        	
+	        	//game.getGamePane().getChildren().remove(proj);
+	        }
+		
 		if (moving)
      	{
 			actionNum = (int)(Math.random()*(200) + 1);
@@ -143,5 +190,12 @@ public class NPC extends Character
     	while( (xFinal % 5) != 0)
     		xFinal--;
     	
+	}
+	
+	public void shoot()
+	{
+		proj = new Projectile(this.getX() + this.getWidth(), this.getY() + (this.getHeight() / 2), this.direction);
+		game.getGamePane().getChildren().add(proj);
+		shooting = true;
 	}
 }
