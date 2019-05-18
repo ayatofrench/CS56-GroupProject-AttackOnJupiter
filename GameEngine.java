@@ -39,7 +39,6 @@ public class GameEngine
 
      public GameEngine() 
      {
-
         gamePane = new GamePane();
         startPane = new StartMenuPane();
         gameLoop = gameLoop();
@@ -49,7 +48,6 @@ public class GameEngine
         scene = new Scene(startPane, primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
 
         btnListener();
-
      }
 
      private void initGame() 
@@ -87,6 +85,9 @@ public class GameEngine
         {
             @Override
             public void handle(long now) {
+            	
+            	if (lisa.sleepTime != 0)
+            		lisa.sleepTime--;
                 lisa.handleMovement(input);
                 enemy.handleMovement(input);
             }
@@ -95,15 +96,27 @@ public class GameEngine
 
      private void keyListener() 
      {
+    	gameScene.setOnKeyTyped((event) ->
+    	{
+    		String code = event.getCode().toString();
+    		
+    			
+    		if (lisa.isShooting() && input.contains("RIGHT"))
+    		{
+    			
+    			input.remove(code);
+    		}
+        	
+        	if (lisa.isShooting() && input.contains("LEFT"))
+            	input.remove(code);
+    	});
+    	
         gameScene.setOnKeyPressed((event) -> 
         {
         	String code = event.getCode().toString();
         
         	if(!input.contains(code))
                 	input.add(code);
-            
-        	if (lisa.isShooting() && input.contains("RIGHT"))
-            	input.remove(code);
 
         	if(input.contains("SPACE")) {
                 lisa.jump();
@@ -114,7 +127,7 @@ public class GameEngine
             
         	if(input.contains("P")) {
         		pauseGame();
-        	}
+        }
             
         lisa.setPrevXPos(lisa.getX());
     });
@@ -307,4 +320,7 @@ public class GameEngine
     	return this.background;
     }
 
+     public void adObject(Object obj)
+     {
+     }
 }
