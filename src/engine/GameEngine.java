@@ -1,4 +1,7 @@
+package engine;
+
 import java.util.ArrayList;
+
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -10,6 +13,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
+import objects.Character;
+import objects.Enemy;
+import objects.Player;
 
 public class GameEngine {
 
@@ -25,17 +31,17 @@ public class GameEngine {
     private Rectangle ground = new Rectangle();
     private ArrayList<String> input;
 
-    private Character c = new Character();
-    private boolean jumping = false;
+    private Character lisa = new Player();
+    private Character enemy = new Character();
     private boolean paused = false;
-    double gravity = 0;
-    double prevPos = 0;
 
      public GameEngine() {
 
         gamePane = new GamePane();
         startPane = new StartMenuPane();
         gameLoop = gameLoop();
+
+        gamePane.setEngine(this);
 
         input = new ArrayList<>();
 
@@ -47,16 +53,18 @@ public class GameEngine {
 
      private void initGame() {
          //Add character and ground to game
-         gamePane.getChildren().addAll(c, ground);
+         enemy.setWidth(primaryScreenBounds.getWidth() * .12);
+		 enemy.setHeight(primaryScreenBounds.getHeight()*(.25));
+		 enemy.setX(0);
+		 enemy.setY(primaryScreenBounds.getHeight()*(.84) - enemy.getHeight());
+
+         gamePane.getChildren().addAll(lisa, ground, enemy);
 
          //Create game scene
          gameScene = new Scene(gamePane, primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
 
          //Initialize ground
          createGround();
-
-         //Give character game instance
-         c.setGame(this);
 
          //Set keybindings
          keyListener();
@@ -73,7 +81,12 @@ public class GameEngine {
         return gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                c.handleMovement(input);
+                lisa.handleMovement();
+
+                if(collision(lisa, enemy)) {
+                    enemy.setFill(Color.RED);
+                    //lisa.setX(enemy.getX());
+                }
             }
         };
     }
@@ -87,7 +100,7 @@ public class GameEngine {
                 input.add(code);
 
             if(input.contains("UP")) {
-                c.jump();
+                lisa.jump();
             }
 
             if(input.contains("P")) {
@@ -176,5 +189,13 @@ public class GameEngine {
 
     public Rectangle getGround() {
          return ground;
+    }
+
+    public ArrayList<String> getInput() {
+        return input;
+    }
+
+    private boolean collision(Character obj1, Character obj2) {
+         return obj1.getBoundary().intersects(obj2.getBoundary());
     }
 }
