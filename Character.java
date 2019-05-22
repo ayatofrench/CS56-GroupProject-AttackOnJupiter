@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class Character extends Rectangle
 {
     protected GameEngine game;
+    private Character enemy;
     private int healthPoints;
     protected Rectangle2D primaryScreenBounds = Screen.getPrimary().getBounds();
     protected final float GRAVITAIONALFORCE = 0.5f;
@@ -22,6 +23,7 @@ public class Character extends Rectangle
     protected double prevXPos;
     protected int maxPosition;
     protected boolean shooting = false;
+    protected int sleepTime = 0;
     
     public Character() 
     {
@@ -149,4 +151,27 @@ public class Character extends Rectangle
         this.jumping = true;
     }
 
+    public void setEnemy(Character enemy)
+	{
+		this.enemy = enemy;
+	}
+
+    public Character getEnemy()
+	{
+		return this.enemy;
+	}
+
+    public int getSleepTime()
+    {
+    	return this.sleepTime;
+    }
+    
+    public void setSleepTime(int sleepTime)
+    {
+    	this.sleepTime = sleepTime;
+    }
+    protected javafx.geometry.Rectangle2D getBoundary(double posX, double posY, double width, double height) 
+	{
+        return new javafx.geometry.Rectangle2D(posX, posY, width, height);
+    }
 }
