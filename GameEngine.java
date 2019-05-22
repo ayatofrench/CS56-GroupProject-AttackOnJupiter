@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -31,15 +32,15 @@ public class GameEngine
     private Rectangle ground = new Rectangle();
     private ArrayList<String> input;
     private Rectangle background = new Rectangle(primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
-    private RangedCharacter lisa = new RangedCharacter();
-    private NPC enemy = new NPC();
+    private Rectangle backgroundCredits = new Rectangle(primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
+    private RangedCharacter lisa;
+    private NPC enemy;
     private boolean paused = false;
     private double gravity = 0;
     private double prevPos = 0;
 
      public GameEngine() 
      {
-        gamePane = new GamePane();
         startPane = new StartMenuPane();
         gameLoop = gameLoop();
 
@@ -50,8 +51,15 @@ public class GameEngine
         btnListener();
      }
 
-     private void initGame() 
+     public void initGame() 
      {
+    	 gamePane = new GamePane();
+    	 gamePane.getChildren().clear();
+    	 
+    	 //Initializing fighters
+    	 lisa = new RangedCharacter();
+    	 enemy = new NPC();
+    	 
     	 //Setting enemies
     	 lisa.setEnemy(enemy);
     	 enemy.setEnemy(lisa);
@@ -80,6 +88,8 @@ public class GameEngine
 
          //Add game scene to Stage
          Main.getStage().setScene(gameScene);
+         Main.getStage().setFullScreenExitHint("NetBeans is trash");
+         Main.getStage().setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
          Main.getStage().setFullScreen(true);
      }
 
@@ -106,7 +116,6 @@ public class GameEngine
     	{
     		String code = event.getCode().toString();
     		
-    			
     		if (lisa.isShooting() && input.contains("RIGHT"))
     		{
     			
@@ -115,6 +124,9 @@ public class GameEngine
         	
         	if (lisa.isShooting() && input.contains("LEFT"))
             	input.remove(code);
+        	
+        	if(input.contains("ESCAPE"))
+        		Main.getStage().setFullScreen(false);
     	});
     	
         gameScene.setOnKeyPressed((event) -> 
@@ -140,7 +152,6 @@ public class GameEngine
 
         gameScene.setOnKeyReleased((event) -> {
             String code = event.getCode().toString();
-
 
             input.remove(code);
         });
@@ -183,31 +194,39 @@ public class GameEngine
          
          startPane.getCreditsButton().setOnMouseClicked((event) -> 
          {
-        	 BackgroundImage image = new BackgroundImage(new Image("file:Pictures/AoJLoadingScreen.gif"), 
-					  BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-			      BackgroundSize.DEFAULT);
+        	 backgroundCredits.setWidth(primaryScreenBounds.getWidth());
+             backgroundCredits.setHeight(primaryScreenBounds.getHeight());
+             Image setting = new Image("file:Pictures/AoJLoadingScreen.gif");
+             ImagePattern settingP = new ImagePattern(setting);
+             backgroundCredits.setFill(settingP);
+             
        	
-	       	VBox creditPane = new VBox();
-	       	creditPane.setBackground(new Background(image));
+             Pane creditPane = new Pane();
 	       	
-	       	Scene credits = new Scene(creditPane, scene.getWidth(), 582);
-	       	creditPane.setAlignment(Pos.BOTTOM_CENTER);
+	       	Scene credits = new Scene(creditPane, scene.getWidth(), primaryScreenBounds.getHeight());
+	       	//creditPane.setAlignment(Pos.BOTTOM_CENTER);
 	       	Font CreditFont = new Font("Comic Sans MS", 25);
+	       	creditPane.getChildren().add(backgroundCredits);
 	       	
 	       	//made 2 labels for names due to formatting issues
 	       	Label names1 = new Label("Shant"+"\n"+"Zak"+"\n"+"Ryoto"+"\n");
 	       	names1.setOpacity(.5);
 	       	names1.setTextFill(Color.CYAN);
 	       	names1.setFont(CreditFont);
+	       	names1.setLayoutX(primaryScreenBounds.getWidth() / 2);
+	       	names1.setLayoutY(primaryScreenBounds.getHeight() * 0.52);
 	       	creditPane.getChildren().add(names1);
-	       	Label names = new Label("      Alex"+"\n"+"      Ayoto"+"\n"+"      Apurav"+"\n"+"      Donovan");
+	       	Label names = new Label("Alex"+"\n"+"Ayato"+"\n"+"Apurav"+"\n"+"Donovan");
 	       	names.setOpacity(.5);
 	       	names.setTextFill(Color.MEDIUMSLATEBLUE);
 	       	names.setFont(CreditFont);
+	       	names.setLayoutX(primaryScreenBounds.getWidth() / 2);
+	       	names.setLayoutY(primaryScreenBounds.getHeight() * 0.67);
 	       	creditPane.getChildren().add(names);
 	       	
 	       	//primaryStage.setTitle("Credits");
 	       	Main.getStage().setScene(credits);
+	       	Main.getStage().setMaximized(true);
 	       	
 	       	//button to for going back to main menu
 	       	Button btnBack = new Button("Go Back to Main Menu");
@@ -216,8 +235,10 @@ public class GameEngine
 	       	btnBack.setStyle("-fx-border-color: black; -fx-background-color: darkslateblue;");
 	       	btnBack.setTextFill(Color.MEDIUMSLATEBLUE);
 	       	btnBack.setFont(CreditFont);
+	       	btnBack.setLayoutX(primaryScreenBounds.getWidth() * .43);
+	       	btnBack.setLayoutY(primaryScreenBounds.getHeight() * .87);
 	       	creditPane.getChildren().add(btnBack);
-	      		btnBack.setAlignment(Pos.BOTTOM_RIGHT);
+	      	btnBack.setAlignment(Pos.BOTTOM_RIGHT);
 	          
 	      		//button action
 	      		btnBack.setOnAction(new EventHandler<ActionEvent>()
@@ -226,7 +247,7 @@ public class GameEngine
 	      			public void handle(ActionEvent event) 
 	      			{
 	      				Main.getStage().setScene(scene);
-	      				Main.getStage().setFullScreen(true);
+	      				//Main.getStage().setFullScreen(true);
 	      			}
 	      		});
 	      });
@@ -234,18 +255,17 @@ public class GameEngine
          
          startPane.getQuitButton().setOnMouseClicked((event -> 
          {
-             //quitWindow.initStyle(StageStyle.UNDECORATED);
         	 Stage quitWindow = new Stage();
              Font font = new Font("Times New Roman", 30);
              BackgroundImage imageBG = new BackgroundImage(new Image("file:Pictures/AoJTerror.gif"),
                      BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                      BackgroundSize.DEFAULT);
-             //
+             
              FlowPane fPane = new FlowPane();
              fPane.setBackground(new Background(imageBG));
              fPane.setHgap(5);
              fPane.setAlignment(Pos.BOTTOM_CENTER);
-             //
+             
              //no button for confirming quit
              Button btnNo = new Button("No");
              btnNo.setStyle("-fx-border-color: darkorange; -fx-background-color: coral");
@@ -325,4 +345,12 @@ public class GameEngine
     {
     	return this.background;
     }
+
+     private void displayDeath()
+     {
+    	 Font deathFont = new Font("Comic Sans MS", 25);
+    	 Label lbl = new Label("There was a death!");
+    	 lbl.setFont(deathFont);
+    	 
+     }
 }
