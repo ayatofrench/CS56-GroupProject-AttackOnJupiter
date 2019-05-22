@@ -18,7 +18,8 @@ public class Main extends Application
         stage = primaryStage;
         GameEngine engine = new GameEngine();
         stage.setTitle("Game Test");
-        stage.setFullScreen(true);
+        //stage.setFullScreen(true);
+        stage.setMaximized(true);
         stage.setResizable(false);
         stage.setScene(engine.getScene());
         stage.show();
