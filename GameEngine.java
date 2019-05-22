@@ -33,6 +33,7 @@ public class GameEngine
     private ArrayList<String> input;
     private Rectangle background = new Rectangle(primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
     private Rectangle backgroundCredits = new Rectangle(primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
+    private Rectangle backgroundHTP = new Rectangle(primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
     private RangedCharacter lisa;
     private NPC enemy;
     private boolean paused = false;
@@ -51,6 +52,51 @@ public class GameEngine
         btnListener();
      }
 
+     public void initGameTwo() 
+     {
+    	 gamePane = new GamePane();
+    	 gamePane.getChildren().clear();
+    	 
+    	 //Initializing fighters
+    	 lisa = new RangedCharacter();
+    	 enemy = new NPC();
+    	 enemy.setBossLevel(2);
+    	 
+    	 //Setting enemies
+    	 lisa.setEnemy(enemy);
+    	 enemy.setEnemy(lisa);
+    	 //enemy.setFill(gsP);
+    	 
+         //Add character and ground to game
+         gamePane.getChildren().addAll(background, lisa, enemy, ground);
+
+         //Create game scene
+         gameScene = new Scene(gamePane, primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
+
+         //Initialize setting
+         createSetting();
+         
+         //Initialize ground
+         createGround();
+
+         //Give character game instance
+         lisa.setGame(this);
+         enemy.setGame(this);
+
+         //Set keybindings
+         keyListener();
+
+         //Start the game loop
+         gameLoop.start();
+
+         //Add game scene to Stage
+         Main.getStage().setScene(gameScene);
+         Main.getStage().setFullScreenExitHint("NetBeans is trash");
+         Main.getStage().setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+         Main.getStage().setFullScreen(true);
+     }
+
+     
      public void initGame() 
      {
     	 gamePane = new GamePane();
@@ -59,6 +105,7 @@ public class GameEngine
     	 //Initializing fighters
     	 lisa = new RangedCharacter();
     	 enemy = new NPC();
+    	 enemy.setBossLevel(1);
     	 
     	 //Setting enemies
     	 lisa.setEnemy(enemy);
@@ -92,7 +139,7 @@ public class GameEngine
          Main.getStage().setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
          Main.getStage().setFullScreen(true);
      }
-
+     
      public AnimationTimer gameLoop() 
     {
         return gameLoop = new AnimationTimer() 
@@ -165,20 +212,34 @@ public class GameEngine
          startPane.getHTPButton().setOnMouseClicked(((event) -> 
          {
         	 Stage htpWindow = new Stage();
-        	 BackgroundImage imageBG = new BackgroundImage(new Image("file:Pictures/aojscreenplay.gif"), 
-   				  BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-   		      BackgroundSize.DEFAULT);
-        	 VBox htpPane=new VBox();
-        	 Scene htpScene=new Scene(htpPane,1100,582);
-        	 htpWindow.setScene(htpScene);
-        	 Button btnBack = new Button("Go Back to Main Menu");
-        	 btnBack.setStyle("-fx-border-color: deeppink; -fx-background-color: pink;");
-        	 btnBack.setTextFill(Color.DEEPPINK);
-        	 Font Htp = new Font("Comic Sans MS", 30);
-        	 btnBack.setFont(Htp);
-        	 htpPane.getChildren().add(btnBack);
-        	 htpPane.setBackground(new Background(imageBG));
-        	 htpWindow.show();
+             //BackgroundImage imageBG = new BackgroundImage(new Image("file:Pictures/HowToPlay.png"), 
+        	//BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+        	     //BackgroundSize.DEFAULT);
+                           backgroundHTP.setWidth(1100);
+                  backgroundHTP.setHeight(582);
+                  Image setting = new Image("file:Pictures/menu/HowToPlay.png");
+                  ImagePattern settingP = new ImagePattern(setting);
+                  backgroundHTP.setFill(settingP);
+                  
+             Pane htpPane=new Pane();
+                      htpPane.getChildren().add(backgroundHTP);
+             Scene htpScene=new Scene(htpPane,1100,582);
+             htpWindow.setScene(htpScene);
+             Button btnBack = new Button("Go Back to Main Menu");
+                      
+                      btnBack.setLayoutX(1100*.39);
+             btnBack.setStyle("-fx-border-color: black; -fx-background-color: transparent;");
+             btnBack.setTextFill(Color.BLACK);
+                      
+             Font Htp = new Font("Comic Sans MS", 20);
+             btnBack.setFont(Htp);
+             htpPane.getChildren().add(btnBack);
+                      btnBack.setAlignment(Pos.CENTER);
+                      
+             // htpPane.setBackground(new Background(imageBG));
+             htpWindow.show();
+
+             //button to close how to play
 
         	 //button to close how to play
         	 btnBack.setOnAction(new EventHandler<ActionEvent>() 
@@ -196,7 +257,7 @@ public class GameEngine
          {
         	 backgroundCredits.setWidth(primaryScreenBounds.getWidth());
              backgroundCredits.setHeight(primaryScreenBounds.getHeight());
-             Image setting = new Image("file:Pictures/AoJLoadingScreen.gif");
+             Image setting = new Image("file:Pictures/menu/AoJLoadingScreen.gif");
              ImagePattern settingP = new ImagePattern(setting);
              backgroundCredits.setFill(settingP);
              
@@ -205,7 +266,7 @@ public class GameEngine
 	       	
 	       	Scene credits = new Scene(creditPane, scene.getWidth(), primaryScreenBounds.getHeight());
 	       	//creditPane.setAlignment(Pos.BOTTOM_CENTER);
-	       	Font CreditFont = new Font("Comic Sans MS", 25);
+	       	Font CreditFont = new Font("Comic Sans MS", primaryScreenBounds.getHeight() * .03472);
 	       	creditPane.getChildren().add(backgroundCredits);
 	       	
 	       	//made 2 labels for names due to formatting issues
@@ -257,7 +318,7 @@ public class GameEngine
          {
         	 Stage quitWindow = new Stage();
              Font font = new Font("Times New Roman", 30);
-             BackgroundImage imageBG = new BackgroundImage(new Image("file:Pictures/AoJTerror.gif"),
+             BackgroundImage imageBG = new BackgroundImage(new Image("file:Pictures/menu/AoJTerror.gif"),
                      BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                      BackgroundSize.DEFAULT);
              
@@ -309,9 +370,18 @@ public class GameEngine
 
      private void createSetting()
     {
-    	Image setting = new Image("file:Pictures/rain_back.gif");
-        ImagePattern settingP = new ImagePattern(setting);
-        background.setFill(settingP);
+    	Image settingRain = new Image("file:Pictures/scene/rain_back.gif");
+        ImagePattern settingRainP = new ImagePattern(settingRain);
+        
+       
+        Image settingNight = new Image("file:Pictures/scene/dark_ground_back.gif");
+        ImagePattern settingNightP = new ImagePattern(settingNight);
+        
+        if (enemy.getBossLevel() == 1)
+        	background.setFill(settingRainP);
+        
+        if (enemy.getBossLevel() == 2)
+        	background.setFill(settingNightP);
     }
     
      private void createGround() 
