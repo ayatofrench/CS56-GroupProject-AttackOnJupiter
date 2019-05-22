@@ -15,7 +15,7 @@ public class Character extends Rectangle
     private Character enemy;
     private int healthPoints;
     protected Rectangle2D primaryScreenBounds = Screen.getPrimary().getBounds();
-    protected final float GRAVITAIONALFORCE = 0.5f;
+    protected final float GRAVITAIONALFORCE = (float)(primaryScreenBounds.getHeight()*.0004);
     protected float gravity;
     protected boolean jumping = false;
     protected final int MOVEMENTSPEED = 5;
