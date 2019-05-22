@@ -128,8 +128,6 @@ public class Character extends Rectangle
 
         if (this.getY() < 0){
             this.setY(0);
-            gravity = 0;
-            jumping = false;
         }
 
         if ((this.getX() < 0)){
