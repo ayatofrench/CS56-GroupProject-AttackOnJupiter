@@ -23,7 +23,7 @@ public class Projectile extends Rectangle
 		this.setX(x);
 		this.setY(y);
 		if (((this.getY()) + (this.getHeight())) > (GROUNDLEVEL))
-            this.setY(GROUNDLEVEL - 200);
+            this.setY(GROUNDLEVEL - y);
 		//this.setFill(Color.RED);
 		//this.setStrokeWidth(100);
 	}
