@@ -1,23 +1,29 @@
 package AoJGame;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Screen;
 
 public class Projectile extends Rectangle
 {
 	private final int MOVEMENTSPEED = 10;
 	private String direction;
+	private Rectangle2D primaryScreenBounds = Screen.getPrimary().getBounds();
+	private final double GROUNDLEVEL = primaryScreenBounds.getHeight()*(.84);
 	
 	public Projectile(double x, double y, String direction)
 	{
 		this.direction = direction;
-		this.setX(x);
-		this.setY(y);
 		this.setWidth(40);
 		this.setHeight(40);
+		this.setX(x);
+		this.setY(y);
+		if (((this.getY()) + (this.getHeight())) > (GROUNDLEVEL))
+            this.setY(GROUNDLEVEL - 200);
 		//this.setFill(Color.RED);
 		//this.setStrokeWidth(100);
 	}
