@@ -52,6 +52,10 @@ public class GameEngine
 
      private void initGame() 
      {
+    	 //Setting enemies
+    	 lisa.setEnemy(enemy);
+    	 enemy.setEnemy(lisa);
+    	 
          //Add character and ground to game
          gamePane.getChildren().addAll(background, lisa, enemy, ground);
 
@@ -86,8 +90,10 @@ public class GameEngine
             @Override
             public void handle(long now) {
             	
-            	if (lisa.sleepTime != 0)
-            		lisa.sleepTime--;
+            	if (lisa.getSleepTime() != 0)
+            		lisa.setSleepTime(lisa.getSleepTime() - 1);
+            	if (enemy.getSleepTime() != 0)
+            		enemy.setSleepTime(enemy.getSleepTime() - 1);
                 lisa.handleMovement(input);
                 enemy.handleMovement(input);
             }
@@ -283,7 +289,7 @@ public class GameEngine
 
      private void createSetting()
     {
-    	Image setting = new Image("file:Pictures/back_day.gif");
+    	Image setting = new Image("file:Pictures/rain_back.gif");
         ImagePattern settingP = new ImagePattern(setting);
         background.setFill(settingP);
     }
@@ -319,8 +325,4 @@ public class GameEngine
     {
     	return this.background;
     }
-
-     public void adObject(Object obj)
-     {
-     }
 }
