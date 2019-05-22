@@ -12,13 +12,13 @@ public class RangedCharacter extends Character
 	private Rectangle2D primaryScreenBounds = Screen.getPrimary().getBounds();
 	protected Image archerLeft = new Image("file:Pictures/lisa_range/lisa_range_left.gif");
 	protected ImagePattern archerLeftP = new ImagePattern(archerLeft);
-	protected Image archerRight = new Image("file:Pictures/lisa_range_right.gif");
+	protected Image archerRight = new Image("file:Pictures/lisa_range/lisa_range_right.gif");
 	protected ImagePattern archerRightP = new ImagePattern(archerRight);
-	protected Image archerAttackRight = new Image("file:Pictures/lisa_attack_right.gif");
+	protected Image archerAttackRight = new Image("file:Pictures/lisa_range/lisa_attack_right.gif");
 	protected ImagePattern archerAttackRightP = new ImagePattern(archerAttackRight);
-    private Image bulletRight = new Image("file:Pictures/arrow_right.png");
+    private Image bulletRight = new Image("file:Pictures/lisa_range/arrow_right.png");
     private ImagePattern bulletRightP = new ImagePattern(bulletRight);
-    private Image bulletLeft = new Image("file:Pictures/arrow_left.png");
+    private Image bulletLeft = new Image("file:Pictures/lisa_range/arrow_left.png");
     private ImagePattern bulletLeftP = new ImagePattern(bulletLeft);
     private Projectile proj;
 	 
@@ -62,7 +62,11 @@ public class RangedCharacter extends Character
 			game.pauseGame();
 			
 			game.getGamePane().getChildren().clear();
-			game.initGame();
+			
+			if (((NPC)(this.getEnemy())).getBossLevel() == 1)
+				game.initGame();
+			if (((NPC)(this.getEnemy())).getBossLevel() == 2)
+				game.initGameTwo();
 		}
 		
 		if (this.isAlive())
@@ -96,7 +100,7 @@ public class RangedCharacter extends Character
 	        		this.setDirection("right");
 	            	this.setFill(archerAttackRightP);
 	            	this.shoot();
-	            	sleepTime = 110;
+	            	sleepTime = 1000;
 	        	}
 	        }
 	        
@@ -107,7 +111,7 @@ public class RangedCharacter extends Character
 	        		this.setDirection("left");
 	        		this.setFill(archerLeftP);
 	        		this.shoot();
-	        		sleepTime = 110;
+	        		sleepTime = 1000;
 	        	}
 	        }
 	        
@@ -131,7 +135,7 @@ public class RangedCharacter extends Character
 	        	{
 	        		game.getGamePane().getChildren().remove(proj);
 	        		
-	        		this.getEnemy().reduceHealth(10);
+	        		this.getEnemy().reduceHealth(120);
 	        		if (!this.getEnemy().isAlive())
 	        			game.getGamePane().getChildren().remove(this.getEnemy());
 	        		
