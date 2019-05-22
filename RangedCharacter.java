@@ -1,7 +1,6 @@
 package AoJGame;
 
 import java.util.ArrayList;
-
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -25,6 +24,7 @@ public class RangedCharacter extends Character
 	 
 	public RangedCharacter()
 	{
+		this.sleepTime = 0;
         this.setFill(archerRightP);
 		this.setDirection("right");
 		this.setHealth(120);
@@ -60,6 +60,9 @@ public class RangedCharacter extends Character
 		{
 			game.getGamePane().getChildren().remove(proj);
 			game.pauseGame();
+			
+			game.getGamePane().getChildren().clear();
+			game.initGame();
 		}
 		
 		if (this.isAlive())
@@ -131,8 +134,8 @@ public class RangedCharacter extends Character
 	        		this.getEnemy().reduceHealth(10);
 	        		if (!this.getEnemy().isAlive())
 	        			game.getGamePane().getChildren().remove(this.getEnemy());
-	        		sleepTime = 0;
 	        		
+	        		sleepTime = 0;	
 	        		shooting = false;
 	        	}
 	        	
@@ -156,7 +159,7 @@ public class RangedCharacter extends Character
 	            this.setY(this.getY() - 10 + gravity);
 	            gravity += GRAVITAIONALFORCE;
 	
-	            if(this.getY() + this.getHeight() > game.getGround().getY()) 
+	            if (this.getY() + this.getHeight() > game.getGround().getY()) 
 	            {
 	                gravity = 0;
 	                jumping = false;
@@ -176,7 +179,6 @@ public class RangedCharacter extends Character
 	        if (this.getX() < 0)
 	        	this.setX(0);
 	        
-	
 	        if (this.getX() > maxPosition)
 	            this.setX(maxPosition);
 		}
