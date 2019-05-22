@@ -25,6 +25,7 @@ public class NPC extends Character
     
     public NPC()
     {
+    	this.sleepTime = 0;
     	this.setFill(metaManLeftP);
     	this.setHealth(120);
 		this.setWidth((int)(primaryScreenBounds.getWidth() * .2));
@@ -46,7 +47,7 @@ public class NPC extends Character
 		if (!this.isAlive())
 		{
 			game.getGamePane().getChildren().remove(proj);
-			game.pauseGame();
+			game.initGame();
 		}
 		
 		if (this.isAlive())
@@ -79,7 +80,9 @@ public class NPC extends Character
 					{
 		        		this.getEnemy().reduceHealth(10);
 		        		if (!this.getEnemy().isAlive())
+		        		{
 		        			game.getGamePane().getChildren().remove(this.getEnemy());
+		        		}
 		        		
 		        		game.getGamePane().getChildren().remove(proj);
 		        		sleepTime = 0;
