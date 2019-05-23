@@ -25,14 +25,14 @@ public class StartMenuPane extends Group {
     private Rectangle2D primaryScreenBounds = Screen.getPrimary().getBounds();
     private Rectangle background = new Rectangle(primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
 
-    public StartMenuPane() 
+    public StartMenuPane()
     {
         Font font = new Font("Times New Roman", 30);
-        
+
         //Creating background image
         background.setWidth(primaryScreenBounds.getWidth());
         background.setHeight(primaryScreenBounds.getHeight());
-        Image setting = new Image("file:Pictures/AttackOnJavaJupiterMenu.jpg");
+        Image setting = new Image("file:Pictures/menu/AttackOnJavaJupiterMenu.jpg");
         ImagePattern settingP = new ImagePattern(setting);
         background.setFill(settingP);
 
@@ -44,7 +44,7 @@ public class StartMenuPane extends Group {
         btnPlay.setFont(font);
         btnPlay.setLayoutX(primaryScreenBounds.getWidth() / 2.25);
         btnPlay.setLayoutY(primaryScreenBounds.getHeight() * .3);
-        
+
         //How to Play button with its properties
         btnHTP = new Button("How to play");
         btnHTP.setStyle("-fx-border-color: deeppink; -fx-background-color: pink;");
@@ -73,27 +73,27 @@ public class StartMenuPane extends Group {
         this.getChildren().addAll(background, btnPlay, btnHTP, btnCredits, btnQuit);
     }
 
-    public Button getPlayButton() 
+    public Button getPlayButton()
     {
         return btnPlay;
     }
-    
+
     public Button getCreditsButton()
     {
     	return btnCredits;
     }
-    
+
     public Button getHTPButton()
     {
     	return btnHTP;
     }
 
-    public Button getQuitButton() 
+    public Button getQuitButton()
     {
         return btnQuit;
     }
 
-    public void setGameEngine(GameEngine game) 
+    public void setGameEngine(GameEngine game)
     {
         this.game = game;
     }
