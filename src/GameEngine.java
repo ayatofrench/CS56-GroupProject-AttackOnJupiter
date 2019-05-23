@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -44,10 +45,10 @@ public class GameEngine
         gameLoop = gameLoop();
 
         input = new ArrayList<>();
+        startPane.setGameEngine(this);
+        scene = startPane.getMainScene();
 
-        scene = new Scene(startPane, primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
-
-        btnListener();
+        //btnListener();
      }
 
      public void initGameTwo()
@@ -136,6 +137,8 @@ public class GameEngine
          Main.getStage().setFullScreenExitHint("NetBeans is trash");
          Main.getStage().setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
          Main.getStage().setFullScreen(true);
+//         Parent root = gameScene.getRoot();
+//         Main.getStage().getScene().setRoot(root);
      }
 
      public AnimationTimer gameLoop()
@@ -202,158 +205,158 @@ public class GameEngine
         });
     }
 
-     private void btnListener() {
-         startPane.getPlayButton().setOnMouseClicked((event) -> {
-            initGame();
-         });
-
-         startPane.getHTPButton().setOnMouseClicked(((event) ->
-         {
-        	 Stage htpWindow = new Stage();
-             //BackgroundImage imageBG = new BackgroundImage(new Image("file:Pictures/HowToPlay.png"),
-        	//BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-        	     //BackgroundSize.DEFAULT);
-                           backgroundHTP.setWidth(1100);
-                  backgroundHTP.setHeight(582);
-                  Image setting = new Image("file:Pictures/menu/HowToPlay.png");
-                  ImagePattern settingP = new ImagePattern(setting);
-                  backgroundHTP.setFill(settingP);
-
-             Pane htpPane=new Pane();
-                      htpPane.getChildren().add(backgroundHTP);
-             Scene htpScene=new Scene(htpPane,1100,582);
-             htpWindow.setScene(htpScene);
-             Button btnBack = new Button("Go Back to Main Menu");
-
-                      btnBack.setLayoutX(1100*.39);
-             btnBack.setStyle("-fx-border-color: black; -fx-background-color: transparent;");
-             btnBack.setTextFill(Color.BLACK);
-
-             Font Htp = new Font("Comic Sans MS", 20);
-             btnBack.setFont(Htp);
-             htpPane.getChildren().add(btnBack);
-                      btnBack.setAlignment(Pos.CENTER);
-
-             // htpPane.setBackground(new Background(imageBG));
-             htpWindow.show();
-
-             //button to close how to play
-
-        	 //button to close how to play
-        	 btnBack.setOnAction(new EventHandler<ActionEvent>()
-        	 {
-               @Override
-               public void handle(ActionEvent event)
-               {
-                   htpWindow.close();
-               }
-
-        	 });
-         }));
-
-         startPane.getCreditsButton().setOnMouseClicked((event) ->
-         {
-        	 backgroundCredits.setWidth(primaryScreenBounds.getWidth());
-             backgroundCredits.setHeight(primaryScreenBounds.getHeight());
-             Image setting = new Image("file:Pictures/menu/AoJLoadingScreen.gif");
-             ImagePattern settingP = new ImagePattern(setting);
-             backgroundCredits.setFill(settingP);
-
-
-             Pane creditPane = new Pane();
-
-	       	Scene credits = new Scene(creditPane, scene.getWidth(), primaryScreenBounds.getHeight());
-	       	//creditPane.setAlignment(Pos.BOTTOM_CENTER);
-	       	Font CreditFont = new Font("Comic Sans MS", primaryScreenBounds.getHeight() * .03472);
-	       	creditPane.getChildren().add(backgroundCredits);
-
-	       	//made 2 labels for names due to formatting issues
-	       	Label names1 = new Label("Shant"+"\n"+"Zak"+"\n"+"Ryoto"+"\n");
-	       	names1.setOpacity(.5);
-	       	names1.setTextFill(Color.CYAN);
-	       	names1.setFont(CreditFont);
-	       	names1.setLayoutX(primaryScreenBounds.getWidth() / 2);
-	       	names1.setLayoutY(primaryScreenBounds.getHeight() * 0.52);
-	       	creditPane.getChildren().add(names1);
-	       	Label names = new Label("Alex"+"\n"+"Ayato"+"\n"+"Apurav"+"\n"+"Donovan");
-	       	names.setOpacity(.5);
-	       	names.setTextFill(Color.MEDIUMSLATEBLUE);
-	       	names.setFont(CreditFont);
-	       	names.setLayoutX(primaryScreenBounds.getWidth() / 2);
-	       	names.setLayoutY(primaryScreenBounds.getHeight() * 0.67);
-	       	creditPane.getChildren().add(names);
-
-	       	//primaryStage.setTitle("Credits");
-	       	Main.getStage().setScene(credits);
-	       	Main.getStage().setMaximized(true);
-
-	       	//button to for going back to main menu
-	       	Button btnBack = new Button("Go Back to Main Menu");
-	       	btnBack.setAlignment(Pos.BOTTOM_CENTER);
-	       	btnBack.setOpacity(.5);
-	       	btnBack.setStyle("-fx-border-color: black; -fx-background-color: darkslateblue;");
-	       	btnBack.setTextFill(Color.MEDIUMSLATEBLUE);
-	       	btnBack.setFont(CreditFont);
-	       	btnBack.setLayoutX(primaryScreenBounds.getWidth() * .43);
-	       	btnBack.setLayoutY(primaryScreenBounds.getHeight() * .87);
-	       	creditPane.getChildren().add(btnBack);
-	      	btnBack.setAlignment(Pos.BOTTOM_RIGHT);
-
-	      		//button action
-	      		btnBack.setOnAction(new EventHandler<ActionEvent>()
-	      		{
-	      			@Override
-	      			public void handle(ActionEvent event)
-	      			{
-	      				Main.getStage().setScene(scene);
-	      				//Main.getStage().setFullScreen(true);
-	      			}
-	      		});
-	      });
-
-
-         startPane.getQuitButton().setOnMouseClicked((event ->
-         {
-        	 Stage quitWindow = new Stage();
-             Font font = new Font("Times New Roman", 30);
-             BackgroundImage imageBG = new BackgroundImage(new Image("file:Pictures/menu/AoJTerror.gif"),
-                     BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-                     BackgroundSize.DEFAULT);
-
-             FlowPane fPane = new FlowPane();
-             fPane.setBackground(new Background(imageBG));
-             fPane.setHgap(5);
-             fPane.setAlignment(Pos.BOTTOM_CENTER);
-
-             //no button for confirming quit
-             Button btnNo = new Button("No");
-             btnNo.setStyle("-fx-border-color: darkorange; -fx-background-color: coral");
-             btnNo.setFont(font);
-             btnNo.setOpacity(.5);
-             btnNo.setTextFill(Color.BLACK);
-
-             //yes button for confirming quit
-             Button btnYes = new Button("Yes");
-             btnYes.setStyle("-fx-border-color: darkorange; -fx-background-color: coral");
-             btnYes.setFont(font);
-             btnYes.setOpacity(0.5);
-             btnYes.setTextFill(Color.BLACK);
-
-            fPane.getChildren().addAll(btnYes, btnNo);
-     		Scene quitScene = new Scene(fPane, 498, 317);
-     		quitWindow.setScene(quitScene);
-     		quitWindow.setTitle("Quit Window");
-     		quitWindow.show();
-
-             btnNo.setOnMouseClicked((e) -> {
-            	 quitWindow.close();
-                 Main.getStage().setScene(scene);
-             });
-             btnYes.setOnMouseClicked((e) -> {
-                 System.exit(0);
-             });
-         }));
-    }
+//     private void btnListener() {
+//         startPane.getPlayButton().setOnMouseClicked((event) -> {
+//            initGame();
+//         });
+//
+//         startPane.getHTPButton().setOnMouseClicked(((event) ->
+//         {
+//        	 Stage htpWindow = new Stage();
+//             //BackgroundImage imageBG = new BackgroundImage(new Image("file:Pictures/HowToPlay.png"),
+//        	//BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+//        	     //BackgroundSize.DEFAULT);
+////             backgroundHTP.setWidth(1100);
+////             backgroundHTP.setHeight(582);
+////             Image setting = new Image("file:Pictures/menu/HowToPlay.png");
+////             ImagePattern settingP = new ImagePattern(setting);
+////             backgroundHTP.setFill(settingP);
+////
+////             Pane htpPane=new Pane();
+////                      htpPane.getChildren().add(backgroundHTP);
+////             Scene htpScene=new Scene(htpPane,1100,582);
+////             htpWindow.setScene(htpScene);
+////             Button btnBack = new Button("Go Back to Main Menu");
+////
+////                      btnBack.setLayoutX(1100*.39);
+////             btnBack.setStyle("-fx-border-color: black; -fx-background-color: transparent;");
+////             btnBack.setTextFill(Color.BLACK);
+////
+////             Font Htp = new Font("Comic Sans MS", 20);
+////             btnBack.setFont(Htp);
+////             htpPane.getChildren().add(btnBack);
+////                      btnBack.setAlignment(Pos.CENTER);
+//
+//             // htpPane.setBackground(new Background(imageBG));
+//             htpWindow.show();
+//
+//             //button to close how to play
+//
+//        	 //button to close how to play
+////        	 btnBack.setOnAction(new EventHandler<ActionEvent>()
+////        	 {
+////               @Override
+////               public void handle(ActionEvent event)
+////               {
+////                   htpWindow.close();
+////               }
+////
+////        	 });
+//         }));
+//
+//         startPane.getCreditsButton().setOnMouseClicked((event) ->
+//         {
+//        	 backgroundCredits.setWidth(primaryScreenBounds.getWidth());
+//             backgroundCredits.setHeight(primaryScreenBounds.getHeight());
+//             Image setting = new Image("file:Pictures/menu/AoJLoadingScreen.gif");
+//             ImagePattern settingP = new ImagePattern(setting);
+//             backgroundCredits.setFill(settingP);
+//
+//
+//             Pane creditPane = new Pane();
+//
+//	       	Scene credits = new Scene(creditPane, scene.getWidth(), primaryScreenBounds.getHeight());
+//	       	//creditPane.setAlignment(Pos.BOTTOM_CENTER);
+//	       	Font CreditFont = new Font("Comic Sans MS", primaryScreenBounds.getHeight() * .03472);
+//	       	creditPane.getChildren().add(backgroundCredits);
+//
+//	       	//made 2 labels for names due to formatting issues
+//	       	Label names1 = new Label("Shant"+"\n"+"Zak"+"\n"+"Ryoto"+"\n");
+//	       	names1.setOpacity(.5);
+//	       	names1.setTextFill(Color.CYAN);
+//	       	names1.setFont(CreditFont);
+//	       	names1.setLayoutX(primaryScreenBounds.getWidth() / 2);
+//	       	names1.setLayoutY(primaryScreenBounds.getHeight() * 0.52);
+//	       	creditPane.getChildren().add(names1);
+//	       	Label names = new Label("Alex"+"\n"+"Ayato"+"\n"+"Apurav"+"\n"+"Donovan");
+//	       	names.setOpacity(.5);
+//	       	names.setTextFill(Color.MEDIUMSLATEBLUE);
+//	       	names.setFont(CreditFont);
+//	       	names.setLayoutX(primaryScreenBounds.getWidth() / 2);
+//	       	names.setLayoutY(primaryScreenBounds.getHeight() * 0.67);
+//	       	creditPane.getChildren().add(names);
+//
+//	       	//primaryStage.setTitle("Credits");
+//	       	Main.getStage().setScene(credits);
+//	       	Main.getStage().setMaximized(true);
+//
+//	       	//button to for going back to main menu
+//	       	Button btnBack = new Button("Go Back to Main Menu");
+//	       	btnBack.setAlignment(Pos.BOTTOM_CENTER);
+//	       	btnBack.setOpacity(.5);
+//	       	btnBack.setStyle("-fx-border-color: black; -fx-background-color: darkslateblue;");
+//	       	btnBack.setTextFill(Color.MEDIUMSLATEBLUE);
+//	       	btnBack.setFont(CreditFont);
+//	       	btnBack.setLayoutX(primaryScreenBounds.getWidth() * .43);
+//	       	btnBack.setLayoutY(primaryScreenBounds.getHeight() * .87);
+//	       	creditPane.getChildren().add(btnBack);
+//	      	btnBack.setAlignment(Pos.BOTTOM_RIGHT);
+//
+//	      		//button action
+//	      		btnBack.setOnAction(new EventHandler<ActionEvent>()
+//	      		{
+//	      			@Override
+//	      			public void handle(ActionEvent event)
+//	      			{
+//	      				Main.getStage().setScene(scene);
+//	      				//Main.getStage().setFullScreen(true);
+//	      			}
+//	      		});
+//	      });
+//
+//
+//         startPane.getQuitButton().setOnMouseClicked((event ->
+//         {
+//        	 Stage quitWindow = new Stage();
+//             Font font = new Font("Times New Roman", 30);
+//             BackgroundImage imageBG = new BackgroundImage(new Image("file:Pictures/menu/AoJTerror.gif"),
+//                     BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
+//                     BackgroundSize.DEFAULT);
+//
+//             FlowPane fPane = new FlowPane();
+//             fPane.setBackground(new Background(imageBG));
+//             fPane.setHgap(5);
+//             fPane.setAlignment(Pos.BOTTOM_CENTER);
+//
+//             //no button for confirming quit
+//             Button btnNo = new Button("No");
+//             btnNo.setStyle("-fx-border-color: darkorange; -fx-background-color: coral");
+//             btnNo.setFont(font);
+//             btnNo.setOpacity(.5);
+//             btnNo.setTextFill(Color.BLACK);
+//
+//             //yes button for confirming quit
+//             Button btnYes = new Button("Yes");
+//             btnYes.setStyle("-fx-border-color: darkorange; -fx-background-color: coral");
+//             btnYes.setFont(font);
+//             btnYes.setOpacity(0.5);
+//             btnYes.setTextFill(Color.BLACK);
+//
+//            fPane.getChildren().addAll(btnYes, btnNo);
+//     		Scene quitScene = new Scene(fPane, 498, 317);
+//     		quitWindow.setScene(quitScene);
+//     		quitWindow.setTitle("Quit Window");
+//     		quitWindow.show();
+//
+//             btnNo.setOnMouseClicked((e) -> {
+//            	 quitWindow.close();
+//                 Main.getStage().setScene(scene);
+//             });
+//             btnYes.setOnMouseClicked((e) -> {
+//                 System.exit(0);
+//             });
+//         }));
+//    }
 
      public void pauseGame() {
         if(!paused) {
@@ -368,18 +371,18 @@ public class GameEngine
 
      private void createSetting()
     {
-    	Image settingRain = new Image("file:Pictures/scene/rain_back.gif");
-        ImagePattern settingRainP = new ImagePattern(settingRain);
+//    	Image settingRain = new Image("file:Pictures/scene/rain_back.gif");
+//        ImagePattern settingRainP = new ImagePattern(settingRain);
+//
+//
+//        Image settingNight = new Image("file:Pictures/scene/dark_ground_back.gif");
+//        ImagePattern settingNightP = new ImagePattern(settingNight);
 
-
-        Image settingNight = new Image("file:Pictures/scene/dark_ground_back.gif");
-        ImagePattern settingNightP = new ImagePattern(settingNight);
-
-        if (enemy.getBossLevel() == 1)
-        	background.setFill(settingRainP);
-
-        if (enemy.getBossLevel() == 2)
-        	background.setFill(settingNightP);
+//        if (enemy.getBossLevel() == 1)
+//        	background.setFill(settingRainP);
+//
+//        if (enemy.getBossLevel() == 2)
+//        	background.setFill(settingNightP);
     }
 
      private void createGround()

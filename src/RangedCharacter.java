@@ -12,7 +12,7 @@ public class RangedCharacter extends Character
 	protected ImagePattern archerLeftP = new ImagePattern(archerLeft);
 	protected Image archerRight = new Image("file:Pictures/lisa_range/lisa_range_right.gif");
 	protected ImagePattern archerRightP = new ImagePattern(archerRight);
-	protected Image archerAttackRight = new Image("file:Pictures/lisa_range/lisa_attack_right.gif");
+	protected Image archerAttackRight = new Image("file:Pictures/lisa_range/lisa_range_right.gif");
 	protected ImagePattern archerAttackRightP = new ImagePattern(archerAttackRight);
     private Image bulletRight = new Image("file:Pictures/lisa_range/arrow_right.png");
     private ImagePattern bulletRightP = new ImagePattern(bulletRight);
