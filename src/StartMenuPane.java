@@ -1,5 +1,3 @@
-package AoJGame;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -34,7 +32,7 @@ public class StartMenuPane extends Group {
         //Creating background image
         background.setWidth(primaryScreenBounds.getWidth());
         background.setHeight(primaryScreenBounds.getHeight());
-        Image setting = new Image("file:Pictures/AoJMenu.gif");
+        Image setting = new Image("file:Pictures/AttackOnJavaJupiterMenu.jpg");
         ImagePattern settingP = new ImagePattern(setting);
         background.setFill(settingP);
 

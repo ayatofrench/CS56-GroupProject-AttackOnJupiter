@@ -1,5 +1,3 @@
-package AoJGame;
-
 import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
@@ -75,7 +73,7 @@ public class GameEngine
          gameLoop.start();
 
          //Add game scene to Stage
-         Main.getStage().setScene(gameScene);
+         Main.getStage().getScene().setRoot(gameScene.getRoot());
          Main.getStage().setFullScreen(true);
      }
 

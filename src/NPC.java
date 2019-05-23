@@ -1,5 +1,3 @@
-package AoJGame;
-
 import java.util.ArrayList;
 
 import javafx.scene.image.Image;

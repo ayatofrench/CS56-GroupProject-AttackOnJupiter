@@ -1,5 +1,3 @@
-package AoJGame;
-
 import java.util.ArrayList;
 
 import javafx.geometry.Rectangle2D;
@@ -11,13 +9,13 @@ import javafx.stage.Screen;
 public class RangedCharacter extends Character
 {
 	private Rectangle2D primaryScreenBounds = Screen.getPrimary().getBounds();
-	private Image archerLeft = new Image("file:Pictures/lisa_range_left.gif");
-    private ImagePattern archerP = new ImagePattern(archerLeft);
+	private Image archerLeft = new Image("file:Pictures/lisa_range_right.gif");
+    private ImagePattern archerLeftP = new ImagePattern(archerLeft);
     private Image archerRight = new Image("file:Pictures/lisa_range_right.gif");
     private ImagePattern archerRightP = new ImagePattern(archerRight);
-    private Image bulletRight = new Image("file:Pictures/arrow_right.png");
+    private Image bulletRight = new Image("file:Pictures/lisaStillLeft.png");
     private ImagePattern bulletRightP = new ImagePattern(bulletRight);
-    private Image bulletLeft = new Image("file:Pictures/arrow_left.png");
+    private Image bulletLeft = new Image("file:Pictures/lisaStillLeft.png");
     private ImagePattern bulletLeftP = new ImagePattern(bulletLeft);
     private Projectile proj;
     public int sleepTime = 0;
@@ -84,7 +82,7 @@ public class RangedCharacter extends Character
         	if (sleepTime == 0)
         	{ 
         		this.setDirection("Right");
-            	this.setFill(archerAttackRightP);
+            	//this.setFill(archerAttackRightP);
             	this.shoot();
             	sleepTime = 2000;
         	}
