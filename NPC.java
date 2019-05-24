@@ -14,27 +14,73 @@ public class NPC extends Character
 	private int time;
 	private int xFinal;
 	private boolean moving = false;
+	
+	//METAMAN TEXTURES
 	private Image metaManLeft = new Image("file:Pictures/metaman/metaman_left.gif");
     private ImagePattern metaManLeftP = new ImagePattern(metaManLeft);
-    private Image metaManRight = new Image("file:Pictures/metaman/metaman_left.gif");
+    private Image metaManRight = new Image("file:Pictures/metaman/metaman_right.gif");
     private ImagePattern metaManRightP = new ImagePattern(metaManRight);
-    private Image gunslingerLeft = new Image("file:Pictures/lisa_range/lisa_range_left.gif");
+    private Image metaManAttackLeft = new Image("file:Pictures/metaman/metaman_attack_left.gif");
+    private ImagePattern metaManAttackLeftP = new ImagePattern(metaManAttackLeft);
+    private Image metaManAttackRight = new Image("file:Pictures/metaman/metaman_attack_right.gif");
+    private ImagePattern metaManAttackRightP = new ImagePattern(metaManAttackRight);
+    private Image metaManStillLeft = new Image("file:Pictures/metaman/metaman_left_still.png");
+    private ImagePattern metaManStillLeftP = new ImagePattern(metaManLeft);
+    private Image metaManStillRight = new Image("file:Pictures/metaman/metaman_right_still.png");
+    private ImagePattern metaManStillRightP = new ImagePattern(metaManRight);
+    
+    private Image gunslingerLeft = new Image("file:Pictures/gunslinger/gunslinger_left.gif");
     private ImagePattern gunslingerLeftP = new ImagePattern(gunslingerLeft);
-    private Image gunslingerRight = new Image("file:Pictures/lisa_range/lisa_range_right.gif");
+    private Image gunslingerRight = new Image("file:Pictures/gunslinger/gunslinger_right.gif");
     private ImagePattern gunslingerRightP = new ImagePattern(gunslingerRight);
+    private Image gunslingerStillLeft = new Image("file:Pictures/gunslinger/gunslinger_left_still.png");
+    private ImagePattern gunslingerStillLeftP = new ImagePattern(gunslingerStillLeft);
+    private Image gunslingerStillRight = new Image("file:Pictures/gunslinger/gunslinger_right_still.png");
+    private ImagePattern gunslingerStillRightP = new ImagePattern(gunslingerStillRight);
+    
+    private Image poisonIvyLeft = new Image("file:Pictures/poisonivy/poison_ivy_left.gif");
+    private ImagePattern poisonIvyLeftP = new ImagePattern(poisonIvyLeft);
+    private Image poisonIvyRight = new Image("file:Pictures/poisonivy/poison_ivy_right.gif");
+    private ImagePattern poisonIvyRightP = new ImagePattern(poisonIvyRight);
+    private Image poisonIvyAttackLeft = new Image("file:Pictures/poisonivy/poison_ivy_attack_left.gif");
+    private ImagePattern poisonIvyAttackLeftP = new ImagePattern(poisonIvyAttackLeft);
+    private Image poisonIvyAttackRight = new Image("file:Pictures/poisonivy/poison_ivy_attack_right.gif");
+    private ImagePattern poisonIvyAttackRightP = new ImagePattern(poisonIvyAttackRight);
+    private Image poisonIvyStillLeft = new Image("file:Pictures/poisonivy/poison_ivy_left_still.png");
+    private ImagePattern poisonIvyStillLeftP = new ImagePattern(poisonIvyStillLeft);
+    private Image poisonIvyStillRight = new Image("file:Pictures/poisonivy/poison_ivy_right_still.png");
+    private ImagePattern poisonIvyStillRightP = new ImagePattern(poisonIvyStillRight);
+    
+    //PROJECTILES VVVVVVVVVVV
+    private Image bulletRight = new Image("file:Pictures/gunslinger/right_bullet.png");
+    private ImagePattern bulletRightP = new ImagePattern(bulletRight);
+    private Image bulletLeft = new Image("file:Pictures/gunslinger/left_bullet.png");
+    private ImagePattern bulletLeftP = new ImagePattern(bulletLeft);
+    
+    private Image poisonRight = new Image("file:Pictures/poisonivy/poison_right.gif");
+    private ImagePattern poisonRightP = new ImagePattern(poisonRight);
+    private Image poisonLeft = new Image("file:Pictures/poisonivy/poison_left.gif");
+    private ImagePattern poisonLeftP = new ImagePattern(poisonLeft);
+    
     private Image worm_right = new Image("file:Pictures/metaman/worm_right.gif");
     private ImagePattern wormRightP = new ImagePattern(worm_right);
     private Image worm_left = new Image("file:Pictures/metaman/worm_left.gif");
     private ImagePattern wormLeftP = new ImagePattern(worm_left);
+    
     private int bossLevel = 0;
+    
+    private Image archerAttackRight = new Image("file:Pictures/lisa_range/lisa_attack_right.gif");
+	private ImagePattern archerAttackRightP = new ImagePattern(archerAttackRight);
     
     public NPC()
     {
     	this.sleepTime = 0;
     	if (bossLevel == 1)
-				this.setFill(gunslingerLeftP);
+			this.setFill(poisonIvyLeftP);
 		if (bossLevel == 2)
-				this.setFill(gunslingerLeftP);
+			this.setFill(gunslingerLeftP);
+		if (bossLevel == 3)
+			this.setFill(metaManLeftP);
     	this.setHealth(120);
 		this.setWidth((int)(primaryScreenBounds.getWidth() * .2));
 		maxPosition = (int)(primaryScreenBounds.getWidth() - this.getWidth());
@@ -43,6 +89,14 @@ public class NPC extends Character
 		this.setHeight(primaryScreenBounds.getHeight()*(.3));
 		this.setX(maxPosition);
 		this.setY(primaryScreenBounds.getHeight()*(.84) - this.getHeight());
+		
+		healthBar.setWidth(180);
+		healthBar.setFill(Color.YELLOWGREEN);
+		healthBar.setX(0);
+   	 	healthBar.setY(healthBar.getHeight());
+   	 	healthBar.setOpacity(.5);
+   	 	healthBar.setStroke(Color.BLACK);
+   	 	
 		xFinal = (int)(Math.random()*((maxPosition  + 1)));
 		this.setDirection("left");
     	checkXFinal(this);
@@ -55,12 +109,19 @@ public class NPC extends Character
 		if (!this.isAlive())
 		{
 			game.getGamePane().getChildren().remove(proj);
-			game.initGameTwo();
+			
+			if (this.bossLevel == 1)
+				game.initGameTwo();
+			
+			if (this.bossLevel == 2)
+				game.initGameThree();
+			
+			//game.pauseGame();
 		}
 		
 		if (this.isAlive())
 		{
-			shootNum = (int)(Math.random()*(150) + 1);
+			shootNum = (int)(Math.random()*(100) + 1);
 			if (shootNum == 5 && sleepTime == 0)
 			{
 				this.shoot();
@@ -70,26 +131,85 @@ public class NPC extends Character
 		    {
 				if (this.getX() < this.getEnemy().getX())
 				{
-					proj.setFill(wormRightP);
+					if (this.bossLevel == 1)
+					{
+						proj.setFill(poisonRightP);
+						this.setFill(poisonIvyAttackRightP);
+					}
+					if (this.bossLevel == 2)
+					{
+						proj.setFill(bulletRightP);
+						this.setFill(gunslingerRightP);
+					}
+					if (this.bossLevel == 3)
+					{
+						proj.setFill(wormRightP);
+						this.setFill(metaManAttackRightP);
+					}
 		        	proj.launchRight();
-		        	sleepTime = 110;
+		        	sleepTime = 1000;
 		        }
 		        	
 				if (this.getX() > this.getEnemy().getX())
 		        {
-		        	proj.setFill(wormLeftP);
+					if (this.bossLevel == 1)
+					{
+						proj.setFill(poisonLeftP);
+						this.setFill(poisonIvyAttackLeftP);
+					}
+					if (this.bossLevel == 2)
+					{
+						proj.setFill(bulletLeftP);
+						this.setFill(gunslingerLeftP);
+					}
+					if (this.bossLevel == 3)
+					{
+						proj.setFill(wormLeftP);
+						this.setFill(metaManAttackLeftP);
+					}
+					
 		        	proj.launchLeft();
-		        	sleepTime = 110;
+		        	sleepTime = 1000;
 		        }
+				
+				if (this.direction.equalsIgnoreCase("RIGHT") && proj.getX() > this.getX() + 300)
+				{	
+					if (bossLevel == 1 && !shooting)
+	     				this.setFill(poisonIvyRightP);
+	     			if (bossLevel == 2 && !shooting)
+	     				this.setFill(gunslingerRightP);
+	     			if (bossLevel == 3 && !shooting)
+	     				this.setFill(metaManRightP);
+				}
+	        	
+	        	if (this.direction.equalsIgnoreCase("left") && proj.getX() < this.getX() + this.getWidth() - 100)
+	        	{	
+	        		if (bossLevel == 1)
+     					this.setFill(poisonIvyRightP);
+     				if (bossLevel == 2)
+     					this.setFill(gunslingerLeftP);
+     				if (bossLevel == 3)
+     					this.setFill(metaManRightP);
+	        	}		
 		        	
 					if(getBoundary(proj.getX(), proj.getY(), proj.getWidth(), 
 	        			proj.getHeight()).intersects(getBoundary(this.getEnemy().getX(), this.getEnemy().getY(), 
 	        					this.getEnemy().getWidth(), this.getEnemy().getHeight())))
 					{
-		        		this.getEnemy().reduceHealth(120);
+		        		this.getEnemy().reduceHealth(20);
+		        		
 		        		if (!this.getEnemy().isAlive())
 		        		{
 		        			game.getGamePane().getChildren().remove(this.getEnemy());
+		        		}
+		        		
+		        		if (healthBar.getWidth() >= 30)
+		        		{
+		        			if (healthBar.getWidth() <= 60)
+		        				healthBar.setFill(Color.RED);
+		        			
+		        			healthBar.setWidth(healthBar.getWidth() - 30);
+		        			//healthBar.setX(healthBar.getX());
 		        		}
 		        		
 		        		game.getGamePane().getChildren().remove(proj);
@@ -123,18 +243,24 @@ public class NPC extends Character
 	     		
 	     		if (this.getDirection().equalsIgnoreCase("right"))
 	     		{
-	     			this.setX(this.getX() + this.getMovementSpeed() * time);
-	     			if (bossLevel == 1)
-	     				this.setFill(metaManRightP);
-	     			if(bossLevel == 2)
+	     			if (bossLevel == 1 && !shooting)
+	     				this.setFill(poisonIvyRightP);
+	     			if (bossLevel == 2 && !shooting)
 	     				this.setFill(gunslingerRightP);
+	     			if (bossLevel == 3 && !shooting)
+	     				this.setFill(metaManRightP);
+	     			
+	     			this.setX(this.getX() + this.getMovementSpeed() * time);
 	     		}
+	     		
 	     		if (this.getDirection().equalsIgnoreCase("left"))
 	     		{
-	     			if (bossLevel == 1)
-	     				this.setFill(metaManLeftP);
-	     			if (bossLevel == 2)
+	     			if (bossLevel == 1 && !shooting)
+	     				this.setFill(poisonIvyLeftP);
+	     			if (bossLevel == 2 && !shooting)
 	     				this.setFill(gunslingerLeftP);
+	     			if (bossLevel == 3 && !shooting)
+	     				this.setFill(metaManLeftP);
 	     				this.setX(this.getX() - this.getMovementSpeed() * time);
 	     		}
 	     		
@@ -145,10 +271,12 @@ public class NPC extends Character
 	     				xFinal = (int)(Math.random()*((maxPosition  + 1)));
 	     				this.setDirection("left");
 	     				checkXFinal(this);
-	     				if (bossLevel == 1)
-	     					this.setFill(metaManRightP);
-	     				if (bossLevel == 2)
+	     				if (bossLevel == 1 && !shooting)
+	     					this.setFill(poisonIvyRightP);
+	     				if (bossLevel == 2 && !shooting)
 	     					this.setFill(gunslingerLeftP);
+	     				if (bossLevel == 3 && !shooting)
+		     				this.setFill(metaManRightP);
 	         		}
 	         		
 	     			else if (this.getDirection().equalsIgnoreCase("left"))
@@ -156,17 +284,18 @@ public class NPC extends Character
 	     				xFinal = (int)(Math.random()*((maxPosition  + 1)));
 	         			this.setDirection("right");
 	         			checkXFinal(this);
-	         			if (bossLevel == 1)
-	         				this.setFill(metaManRightP);
-	         			if (bossLevel == 2)
+	         			if (bossLevel == 1 && !shooting)
+	         				this.setFill(poisonIvyRightP);
+	         			if (bossLevel == 2 && !shooting)
 	         				this.setFill(gunslingerRightP);
+	         			if (bossLevel == 3 && !shooting)
+		     				this.setFill(metaManLeftP);
 	         		}
 	     		}
 	     	}
 			
 			if (jumping) 
 	        {
-				
 	        	//Simulating gravity so the character falls down after jumping
 	            this.setY(this.getY() - 10 + gravity);
 	            gravity += GRAVITAIONALFORCE;
@@ -179,18 +308,22 @@ public class NPC extends Character
 	               
 	            	if (this.getDirection().equalsIgnoreCase("left"))
 	            	{
-	            		if (bossLevel == 1)
-		     				this.setFill(metaManLeftP);
-		     			if (bossLevel == 2)
-		     				this.setFill(gunslingerLeftP);
+	            		if (bossLevel == 1 && !shooting)
+		     				this.setFill(poisonIvyStillLeftP);
+		     			if (bossLevel == 2 && !shooting)
+		     				this.setFill(gunslingerStillLeftP);
+		     			if (bossLevel == 3 && !shooting)
+		     				this.setFill(metaManStillLeftP);
 	            	}
 	               
 	            	if (this.getDirection().equalsIgnoreCase("right"))
 	            	{
-	            		if (bossLevel == 1)
-	         				this.setFill(metaManRightP);
-	         			if (bossLevel == 2)
-	         				this.setFill(gunslingerRightP);
+	            		if (bossLevel == 1 && !shooting)
+	         				this.setFill(poisonIvyStillRightP);
+	         			if (bossLevel == 2 && !shooting)
+	         				this.setFill(gunslingerStillRightP);
+	         			if (bossLevel == 3 && !shooting)
+		     				this.setFill(metaManStillRightP);
 	            	}
 	            }
 	        }
@@ -201,10 +334,12 @@ public class NPC extends Character
 	    		this.setX(0);    
 	    		xFinal = (int)(Math.random()*( (maxPosition + 1) ) );
 	    		checkXFinal(this);
-	    		if (bossLevel == 1)
-     				this.setFill(metaManRightP);
-     			if (bossLevel == 2)
+	    		if (bossLevel == 1 && !shooting)
+     				this.setFill(poisonIvyRightP);
+     			if (bossLevel == 2 && !shooting)
      				this.setFill(gunslingerRightP);
+     			if (bossLevel == 3 && !shooting)
+     				this.setFill(metaManRightP);
 	        }
 			
 			if (this.getX() > maxPosition)
@@ -213,10 +348,12 @@ public class NPC extends Character
 	    		this.setX(maxPosition);
 	    		xFinal = (int)(Math.random()*((maxPosition + 1)));
 	    		checkXFinal(this);
-	    		if (bossLevel == 1)
-     				this.setFill(metaManLeftP);
-     			if (bossLevel == 2)
+	    		if (bossLevel == 1 && !shooting)
+     				this.setFill(poisonIvyLeftP);
+     			if (bossLevel == 2 && !shooting)
      				this.setFill(gunslingerLeftP);
+     			if (bossLevel == 3 && !shooting)
+     				this.setFill(metaManLeftP);
 	    	}
 			
 			if (this.getY() < 0)
@@ -240,7 +377,6 @@ public class NPC extends Character
     	
     	while( (xFinal % 5) != 0)
     		xFinal--;
-    	
 	}
 	
 	public void shoot()
