@@ -116,7 +116,8 @@ public class NPC extends Character
 			if (this.bossLevel == 2)
 				game.initGameThree();
 			
-			//game.pauseGame();
+			game.displayVictory();
+			game.pauseGame();
 		}
 		
 		if (this.isAlive())
@@ -172,7 +173,7 @@ public class NPC extends Character
 		        	sleepTime = 1000;
 		        }
 				
-				if (this.direction.equalsIgnoreCase("RIGHT") && proj.getX() > this.getX() + 300)
+				if (this.direction.equalsIgnoreCase("RIGHT") && proj.getX() > this.getX() + 100)
 				{	
 					if (bossLevel == 1 && !shooting)
 	     				this.setFill(poisonIvyRightP);
@@ -182,7 +183,7 @@ public class NPC extends Character
 	     				this.setFill(metaManRightP);
 				}
 	        	
-	        	if (this.direction.equalsIgnoreCase("left") && proj.getX() < this.getX() + this.getWidth() - 100)
+	        	if (this.direction.equalsIgnoreCase("left") && proj.getX() < this.getX() + this.getWidth() - 50)
 	        	{	
 	        		if (bossLevel == 1)
      					this.setFill(poisonIvyRightP);
