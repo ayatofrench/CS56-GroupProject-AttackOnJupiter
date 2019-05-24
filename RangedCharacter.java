@@ -5,18 +5,29 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
 
 public class RangedCharacter extends Character
 {
 	private Rectangle2D primaryScreenBounds = Screen.getPrimary().getBounds();
-	protected Image archerLeft = new Image("file:Pictures/lisa_range/lisa_range_left.gif");
-	protected ImagePattern archerLeftP = new ImagePattern(archerLeft);
-	protected Image archerRight = new Image("file:Pictures/lisa_range/lisa_range_right.gif");
-	protected ImagePattern archerRightP = new ImagePattern(archerRight);
-	protected Image archerAttackRight = new Image("file:Pictures/lisa_range/lisa_attack_right.gif");
-	protected ImagePattern archerAttackRightP = new ImagePattern(archerAttackRight);
-    private Image bulletRight = new Image("file:Pictures/lisa_range/arrow_right.png");
+	
+	private Image archerLeft = new Image("file:Pictures/lisa_range/lisa_range_left.gif");
+	private ImagePattern archerLeftP = new ImagePattern(archerLeft);
+	private Image archerRight = new Image("file:Pictures/lisa_range/lisa_range_right.gif");
+	private ImagePattern archerRightP = new ImagePattern(archerRight);
+	
+	private Image archerAttackRight = new Image("file:Pictures/lisa_range/lisa_attack_right.gif");
+	private ImagePattern archerAttackRightP = new ImagePattern(archerAttackRight);
+	private Image archerAttackLeft = new Image("file:Pictures/lisa_range/lisa_attack_left.gif");
+	private ImagePattern archerAttackLeftP = new ImagePattern(archerAttackLeft);
+	
+	private Image archerStillLeft = new Image("file:Pictures/lisa_range/lisa_range_left_still.png");
+	private ImagePattern archerStillLeftP = new ImagePattern(archerStillLeft);
+	private Image archerStillRight = new Image("file:Pictures/lisa_range/lisa_range_right_still.png");
+	private ImagePattern archerStillRightP = new ImagePattern(archerStillRight);
+    
+	private Image bulletRight = new Image("file:Pictures/lisa_range/arrow_right.png");
     private ImagePattern bulletRightP = new ImagePattern(bulletRight);
     private Image bulletLeft = new Image("file:Pictures/lisa_range/arrow_left.png");
     private ImagePattern bulletLeftP = new ImagePattern(bulletLeft);
@@ -30,13 +41,47 @@ public class RangedCharacter extends Character
 		this.setHealth(120);
 		this.setWidth(primaryScreenBounds.getWidth() * .15);
 		this.setHeight(primaryScreenBounds.getHeight()*(.25));
-        this.setStroke(Color.GREEN);
+        //this.setStroke(Color.GREEN);
 		this.setX(0);
 		this.setY(primaryScreenBounds.getHeight()*(.84));
 		maxPosition = (int)(primaryScreenBounds.getWidth() - this.getWidth());
 		while(maxPosition % 5 != 0)
 			maxPosition--;
+		
+		healthBar.setWidth(180);
+		//if (((NPC)(this.getEnemy())).getBossLevel() == 1)
+			healthBar.setFill(Color.LIGHTGREY);
+		healthBar.setX(primaryScreenBounds.getWidth() - healthBar.getWidth());
+   	 	healthBar.setY(healthBar.getHeight());
+   	 	healthBar.setOpacity(.5);
+   	 	healthBar.setStroke(Color.BLACK);
 	}
+	
+	public RangedCharacter(int bossLevel)
+	{
+		this.sleepTime = 0;
+        this.setFill(archerRightP);
+		this.setDirection("right");
+		this.setHealth(120);
+		this.setWidth(primaryScreenBounds.getWidth() * .15);
+		this.setHeight(primaryScreenBounds.getHeight()*(.25));
+        //this.setStroke(Color.GREEN);
+		this.setX(0);
+		this.setY(primaryScreenBounds.getHeight()*(.84));
+		maxPosition = (int)(primaryScreenBounds.getWidth() - this.getWidth());
+		while(maxPosition % 5 != 0)
+			maxPosition--;
+		
+		healthBar.setWidth(180);
+		if (bossLevel == 1)
+			healthBar.setFill(Color.LIGHTGREY);
+		healthBar.setX(primaryScreenBounds.getWidth() - healthBar.getWidth());
+   	 	healthBar.setY(healthBar.getHeight());
+   	 	healthBar.setOpacity(.5);
+   	 	healthBar.setStroke(Color.BLACK);
+	}
+	
+	
 	
 	public void shoot()
 	{
@@ -59,14 +104,19 @@ public class RangedCharacter extends Character
 		if (!this.isAlive())
 		{
 			game.getGamePane().getChildren().remove(proj);
-			game.pauseGame();
-			
-			game.getGamePane().getChildren().clear();
+			this.setFill(archerStillRightP);
 			
 			if (((NPC)(this.getEnemy())).getBossLevel() == 1)
 				game.initGame();
+			
 			if (((NPC)(this.getEnemy())).getBossLevel() == 2)
 				game.initGameTwo();
+			
+			if (((NPC)(this.getEnemy())).getBossLevel() == 3)
+				game.initGameThree();
+			
+			game.displayDeath();
+			game.pauseGame();
 		}
 		
 		if (this.isAlive())
@@ -74,13 +124,17 @@ public class RangedCharacter extends Character
 			if (this.getX() > this.getPrevXPos())
 	    	{
 	    		this.setDirection("right");
-	    		this.setFill(archerRightP);
+	    		
+	    		if (!shooting)
+	    			this.setFill(archerRightP);
 	    	}
 	    	
 	    	if (this.getX() < this.getPrevXPos())
 	    	{
 	    		this.setDirection("left");
-	    		this.setFill(archerLeftP);
+	    		
+	    		if (!shooting)
+	    			this.setFill(archerLeftP);
 	    	}
 	    	
 	        if(input.contains("A"))
@@ -109,7 +163,7 @@ public class RangedCharacter extends Character
 	        	if (sleepTime == 0)
 	        	{
 	        		this.setDirection("left");
-	        		this.setFill(archerLeftP);
+	        		this.setFill(archerAttackLeftP);
 	        		this.shoot();
 	        		sleepTime = 1000;
 	        	}
@@ -129,6 +183,13 @@ public class RangedCharacter extends Character
 	        		proj.launchLeft();
 	        	}
 	        	
+	        	if (this.direction.equalsIgnoreCase("RIGHT") && proj.getX() > this.getX() + 300)
+	        		this.setFill(archerRightP);
+	        	
+	        	if (this.direction.equalsIgnoreCase("left") && proj.getX() < this.getX() + this.getWidth() - 100)
+	        		this.setFill(archerLeftP);
+	        	
+	        	
 	        	if(getBoundary(proj.getX(), proj.getY(), proj.getWidth(), 
 	        			proj.getHeight()).intersects(getBoundary(this.getEnemy().getX(), this.getEnemy().getY(), 
 	        					this.getEnemy().getWidth(), this.getEnemy().getHeight())))
@@ -139,6 +200,20 @@ public class RangedCharacter extends Character
 	        		if (!this.getEnemy().isAlive())
 	        			game.getGamePane().getChildren().remove(this.getEnemy());
 	        		
+	        		if (healthBar.getWidth() >= 30)
+	        		{
+	        			if (healthBar.getWidth() <= 60)
+	        				healthBar.setFill(Color.RED);
+	        			
+	        			healthBar.setWidth(healthBar.getWidth() - 30);
+	        			healthBar.setX(healthBar.getX() + 30);
+	        		}
+	        		
+	        		if (this.direction.equalsIgnoreCase("right"))
+	        			this.setFill(archerRightP);
+	        		if (this.direction.equalsIgnoreCase("left"))
+	        			this.setFill(archerLeftP);
+	        		
 	        		sleepTime = 0;	
 	        		shooting = false;
 	        	}
@@ -146,6 +221,12 @@ public class RangedCharacter extends Character
 	        	if (proj.getX() > primaryScreenBounds.getWidth() - proj.getWidth())
 	        	{
 	        		game.getGamePane().getChildren().remove(proj);
+	        		
+	        		if (this.direction.equalsIgnoreCase("right"))
+	        			this.setFill(archerRightP);
+	        		if (this.direction.equalsIgnoreCase("left"))
+	        			this.setFill(archerLeftP);
+	        		
 	        		sleepTime = 0;
 	        		shooting = false;
 	        	}
@@ -153,6 +234,12 @@ public class RangedCharacter extends Character
 	        	if (proj.getX() < 0)
 	        	{
 	        		game.getGamePane().getChildren().remove(proj);
+	        		
+	        		if (this.direction.equalsIgnoreCase("right"))
+	        			this.setFill(archerRightP);
+	        		if (this.direction.equalsIgnoreCase("left"))
+	        			this.setFill(archerLeftP);
+	        		
 	        		sleepTime = 0;
 	        		shooting = false;
 	        	}
@@ -160,11 +247,29 @@ public class RangedCharacter extends Character
 	
 	        if(jumping) 
 	        {
+	        	if (this.direction.equalsIgnoreCase("right"))
+            	{
+	        		if (!shooting)
+	        			this.setFill(archerStillRightP);
+            	}
+            	
+            	if (this.direction.equalsIgnoreCase("left"))
+            	{
+            		if (!shooting)
+            			this.setFill(archerStillLeftP);
+            	}
+	        	
 	            this.setY(this.getY() - 10 + gravity);
 	            gravity += GRAVITAIONALFORCE;
 	
 	            if (this.getY() + this.getHeight() > game.getGround().getY()) 
 	            {
+	            	if (this.direction.equalsIgnoreCase("left"))
+                 	   this.setFill(archerLeftP);
+                    
+                    if (this.direction.equalsIgnoreCase("right"))
+                 	   this.setFill(archerRightP);
+                    
 	                gravity = 0;
 	                jumping = false;
 	            }
@@ -187,4 +292,5 @@ public class RangedCharacter extends Character
 	            this.setX(maxPosition);
 		}
 	}
+	
 }
