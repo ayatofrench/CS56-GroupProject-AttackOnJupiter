@@ -32,23 +32,29 @@ public class RangedCharacter extends Character
     private Image bulletLeft = new Image("file:Pictures/lisa_range/arrow_left.png");
     private ImagePattern bulletLeftP = new ImagePattern(bulletLeft);
     private Projectile proj;
+    
+    private int missionLevel = 0;
 	 
-	public RangedCharacter()
+	public RangedCharacter(int missionLevel)
 	{
+		this.missionLevel = missionLevel;
 		this.sleepTime = 0;
         this.setFill(archerRightP);
 		this.setDirection("right");
 		this.setHealth(120);
 		this.setWidth(primaryScreenBounds.getWidth() * .15);
 		this.setHeight(primaryScreenBounds.getHeight()*(.25));
-        this.setStroke(Color.GREEN);
 		this.setX(0);
 		this.setY(primaryScreenBounds.getHeight()*(.84));
 		maxPosition = (int)(primaryScreenBounds.getWidth() - this.getWidth());
 		while(maxPosition % 5 != 0)
 			maxPosition--;
 		
-		healthBar.setWidth(180);
+		if (this.missionLevel == 3)
+			healthBar.setWidth(300);
+		else 
+			healthBar.setWidth(210);
+		
 		healthBar.setFill(Color.LIGHTGREY);
 		healthBar.setX(primaryScreenBounds.getWidth() - healthBar.getWidth());
    	 	healthBar.setY(healthBar.getHeight());
@@ -156,10 +162,10 @@ public class RangedCharacter extends Character
 	        		proj.launchLeft();
 	        	}
 	        	
-	        	if (this.direction.equalsIgnoreCase("RIGHT") && proj.getX() > this.getX() + 300)
+	        	if (proj.getDirection().equalsIgnoreCase("RIGHT") && proj.getX() > this.getX() + 300)
 	        		this.setFill(archerRightP);
 	        	
-	        	if (this.direction.equalsIgnoreCase("left") && proj.getX() < this.getX() + this.getWidth() - 100)
+	        	if (proj.getDirection().equalsIgnoreCase("left") && proj.getX() < this.getX() + this.getWidth() - 100)
 	        		this.setFill(archerLeftP);
 	        	
 	        	
@@ -169,17 +175,31 @@ public class RangedCharacter extends Character
 	        	{
 	        		game.getGamePane().getChildren().remove(proj);
 	        		
-	        		this.getEnemy().reduceHealth(120);
+	        		this.getEnemy().reduceHealth(5);
 	        		if (!this.getEnemy().isAlive())
 	        			game.getGamePane().getChildren().remove(this.getEnemy());
+	        		if (missionLevel == 1 || missionLevel == 2)
+	        		{ 
+	        			if (healthBar.getWidth() >= 7.5)
+		        		{
+		        			if (healthBar.getWidth() <= 30)
+		        				healthBar.setFill(Color.RED);
+		        			
+		        			healthBar.setWidth(healthBar.getWidth() - 7.5);
+		        			healthBar.setX(healthBar.getX() + 7.5);
+		        		}
+	        		}
 	        		
-	        		if (healthBar.getWidth() >= 30)
+	        		else if (missionLevel == 3)
 	        		{
-	        			if (healthBar.getWidth() <= 60)
-	        				healthBar.setFill(Color.RED);
-	        			
-	        			healthBar.setWidth(healthBar.getWidth() - 30);
-	        			healthBar.setX(healthBar.getX() + 30);
+	        			if (healthBar.getWidth() >= 6.25)
+		        		{
+		        			if (healthBar.getWidth() <= 25)
+		        				healthBar.setFill(Color.RED);
+		        			
+		        			healthBar.setWidth(healthBar.getWidth() - 6.25);
+		        			healthBar.setX(healthBar.getX() + 6.25);
+		        		}
 	        		}
 	        		
 	        		if (this.direction.equalsIgnoreCase("right"))
@@ -264,6 +284,11 @@ public class RangedCharacter extends Character
 	        if (this.getX() > maxPosition)
 	            this.setX(maxPosition);
 		}
+	}
+	
+	public void setMissionLevel(int missionLevel)
+	{
+		this.missionLevel = missionLevel;
 	}
 	
 }
