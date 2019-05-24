@@ -39,6 +39,7 @@ public class GameEngine
     private RangedCharacter lisa;
     private NPC enemy;
     private Label deathLbl = new Label();
+    private Label vicLbl = new Label();
     private boolean paused = false;
     private double gravity = 0;
     private double prevPos = 0;
@@ -68,7 +69,8 @@ public class GameEngine
     	 lisa = new RangedCharacter();
     	 enemy = new NPC();
     	 enemy.setBossLevel(1);
-    	 
+    	 lisa.getHealthBar().setFill(Color.SPRINGGREEN);
+    	   	 
     	 //Setting enemies
     	 lisa.setEnemy(enemy);
     	 enemy.setEnemy(lisa);
@@ -81,11 +83,11 @@ public class GameEngine
     	 lisaHealthBar.setLayoutX(enemy.getHealthBar().getX() * .78);
     	 lisaHealthBar.setLayoutY(enemy.getHealthBar().getY() - enemy.getHealthBar().getHeight());
     	 
-    	 Label enemyHealthBar = new Label("Metal Meta Man's Health:");
+    	 Label enemyHealthBar = new Label("Poison Ivy's Health:");
     	 //enemyHealthBar.setOpacity(.7);
-    	 enemyHealthBar.setTextFill(Color.LIGHTGREY);
+    	 enemyHealthBar.setTextFill(Color.SPRINGGREEN);
     	 enemyHealthBar.setFont(creditFont);
-    	 enemyHealthBar.setLayoutX(lisa.getHealthBar().getX() * .88);
+    	 enemyHealthBar.setLayoutX(lisa.getHealthBar().getX() * .95);
     	 enemyHealthBar.setLayoutY(lisa.getHealthBar().getY() - lisa.getHealthBar().getY());
     	 
          //Add character and ground to game
@@ -130,6 +132,7 @@ public class GameEngine
     	 lisa = new RangedCharacter();
     	 enemy = new NPC();
     	 enemy.setBossLevel(2);
+    	 lisa.getHealthBar().setFill(Color.CRIMSON);
     	 
     	 //Setting enemies
     	 lisa.setEnemy(enemy);
@@ -143,11 +146,11 @@ public class GameEngine
     	 lisaHealthBar.setLayoutX(enemy.getHealthBar().getX() * .78);
     	 lisaHealthBar.setLayoutY(enemy.getHealthBar().getY() - enemy.getHealthBar().getHeight());
     	 
-    	 Label enemyHealthBar = new Label("Metal Meta Man's Health:");
+    	 Label enemyHealthBar = new Label("Gunslinger's Health:");
     	 //enemyHealthBar.setOpacity(.7);
-    	 enemyHealthBar.setTextFill(Color.LIGHTGREY);
+    	 enemyHealthBar.setTextFill(Color.CRIMSON);
     	 enemyHealthBar.setFont(creditFont);
-    	 enemyHealthBar.setLayoutX(lisa.getHealthBar().getX() * .88);
+    	 enemyHealthBar.setLayoutX(lisa.getHealthBar().getX() * .95);
     	 enemyHealthBar.setLayoutY(lisa.getHealthBar().getY() - lisa.getHealthBar().getY());
     	 
     	 gamePane.getChildren().addAll(background, lisa.getHealthBar(), enemy.getHealthBar(), lisaHealthBar,
@@ -190,7 +193,7 @@ public class GameEngine
     	 lisa = new RangedCharacter();
     	 enemy = new NPC();
     	 enemy.setBossLevel(3);
-    	 
+    	
     	 //Setting enemies
     	 lisa.setEnemy(enemy);
     	 enemy.setEnemy(lisa);
@@ -203,7 +206,7 @@ public class GameEngine
     	 lisaHealthBar.setLayoutX(enemy.getHealthBar().getX() * .78);
     	 lisaHealthBar.setLayoutY(enemy.getHealthBar().getY() - enemy.getHealthBar().getHeight());
     	 
-    	 Label enemyHealthBar = new Label("Metal Meta Man's Health:");
+    	 Label enemyHealthBar = new Label("Metal META Man's Health:");
     	 //enemyHealthBar.setOpacity(.7);
     	 enemyHealthBar.setTextFill(Color.LIGHTGREY);
     	 enemyHealthBar.setFont(creditFont);
@@ -255,6 +258,15 @@ public class GameEngine
     				 deathLbl.setOpacity(0);
     				 gamePane.getChildren().remove(deathLbl);
     			 }
+    			 
+    			 if (vicLbl.getOpacity() > .01)
+    				 vicLbl.setOpacity(vicLbl.getOpacity() - .01);
+    			 
+    			 else if (vicLbl.getOpacity() <= .01)
+    			 {
+    				 vicLbl.setOpacity(0);
+    				 gamePane.getChildren().remove(vicLbl);
+    			 }
             	
     			 if (lisa.getSleepTime() != 0)
     				 lisa.setSleepTime(lisa.getSleepTime() - 1);
@@ -278,8 +290,9 @@ public class GameEngine
     		 if (lisa.isShooting() && input.contains("LEFT"))
     			 input.remove(code);
         	
-    		 if(input.contains("ESCAPE"))
+    		 if (input.contains("ESCAPE"))
     			 Main.getStage().setFullScreen(false);
+    		 
     	 });
     	
     	 gameScene.setOnKeyPressed((event) -> 
@@ -313,17 +326,15 @@ public class GameEngine
      }
 
      private void btnListener() {
-         startPane.getPlayButton().setOnMouseClicked((event) -> {
-            initGame();
+         startPane.getPlayButton().setOnMouseClicked((event) -> 
+         {
+        	 initGame();
          });
 
          startPane.getHTPButton().setOnMouseClicked(((event) -> 
          {
         	 Stage htpWindow = new Stage();
         	 htpWindow.initStyle(StageStyle.UNDECORATED);
-             //BackgroundImage imageBG = new BackgroundImage(new Image("file:Pictures/HowToPlay.png"), 
-        	//BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
-        	     //BackgroundSize.DEFAULT);
         	 backgroundHTP.setWidth(1100);
              backgroundHTP.setHeight(582);
              Image setting = new Image("file:Pictures/menu/HowToPlay.png");
@@ -343,13 +354,11 @@ public class GameEngine
              Font Htp = new Font("Comic Sans MS", 20);
              btnBack.setFont(Htp);
              htpPane.getChildren().add(btnBack);
-                      btnBack.setAlignment(Pos.CENTER);
+             btnBack.setAlignment(Pos.CENTER);
                       
              // htpPane.setBackground(new Background(imageBG));
              htpWindow.show();
-
-             //button to close how to play
-
+             
         	 //button to close how to play
         	 btnBack.setOnAction(new EventHandler<ActionEvent>() 
         	 {
@@ -369,59 +378,57 @@ public class GameEngine
              Image setting = new Image("file:Pictures/menu/AoJLoadingScreen.gif");
              ImagePattern settingP = new ImagePattern(setting);
              backgroundCredits.setFill(settingP);
-             
        	
              Pane creditPane = new Pane();
+             
+             Scene credits = new Scene(creditPane, scene.getWidth(), primaryScreenBounds.getHeight());
+             
+             //creditPane.setAlignment(Pos.BOTTOM_CENTER);
+	       	 Font CreditFont = new Font("Comic Sans MS", primaryScreenBounds.getHeight() * .03472);
+	       	 creditPane.getChildren().add(backgroundCredits);
 	       	
-	       	Scene credits = new Scene(creditPane, scene.getWidth(), primaryScreenBounds.getHeight());
-	       	//creditPane.setAlignment(Pos.BOTTOM_CENTER);
-	       	Font CreditFont = new Font("Comic Sans MS", primaryScreenBounds.getHeight() * .03472);
-	       	creditPane.getChildren().add(backgroundCredits);
+	       	 //made 2 labels for names due to formatting issues
+	       	 Label names1 = new Label("Shant"+"\n"+"Zak"+"\n"+"Ryoto"+"\n");
+	       	 names1.setOpacity(.5);
+	       	 names1.setTextFill(Color.CYAN);
+	       	 names1.setFont(CreditFont);
+	       	 names1.setLayoutX(primaryScreenBounds.getWidth() / 2);
+	       	 names1.setLayoutY(primaryScreenBounds.getHeight() * 0.52);
+	       	 creditPane.getChildren().add(names1);
+	       	 
+	       	 Label names = new Label("Alex"+"\n"+"Ayato"+"\n"+"Apurav"+"\n"+"Donovan");
+	       	 names.setOpacity(.5);
+	       	 names.setTextFill(Color.MEDIUMSLATEBLUE);
+	       	 names.setFont(CreditFont);
+	       	 names.setLayoutX(primaryScreenBounds.getWidth() / 2);
+	       	 names.setLayoutY(primaryScreenBounds.getHeight() * 0.67);
+	       	 creditPane.getChildren().add(names);
 	       	
-	       	//made 2 labels for names due to formatting issues
-	       	Label names1 = new Label("Shant"+"\n"+"Zak"+"\n"+"Ryoto"+"\n");
-	       	names1.setOpacity(.5);
-	       	names1.setTextFill(Color.CYAN);
-	       	names1.setFont(CreditFont);
-	       	names1.setLayoutX(primaryScreenBounds.getWidth() / 2);
-	       	names1.setLayoutY(primaryScreenBounds.getHeight() * 0.52);
-	       	creditPane.getChildren().add(names1);
-	       	Label names = new Label("Alex"+"\n"+"Ayato"+"\n"+"Apurav"+"\n"+"Donovan");
-	       	names.setOpacity(.5);
-	       	names.setTextFill(Color.MEDIUMSLATEBLUE);
-	       	names.setFont(CreditFont);
-	       	names.setLayoutX(primaryScreenBounds.getWidth() / 2);
-	       	names.setLayoutY(primaryScreenBounds.getHeight() * 0.67);
-	       	creditPane.getChildren().add(names);
+	       	 Main.getStage().setScene(credits);
+	       	 Main.getStage().setMaximized(true);
 	       	
-	       	//primaryStage.setTitle("Credits");
-	       	Main.getStage().setScene(credits);
-	       	Main.getStage().setMaximized(true);
-	       	
-	       	//button to for going back to main menu
-	       	Button btnBack = new Button("Go Back to Main Menu");
-	       	btnBack.setAlignment(Pos.BOTTOM_CENTER);
-	       	btnBack.setOpacity(.5);
-	       	btnBack.setStyle("-fx-border-color: black; -fx-background-color: darkslateblue;");
-	       	btnBack.setTextFill(Color.MEDIUMSLATEBLUE);
-	       	btnBack.setFont(CreditFont);
-	       	btnBack.setLayoutX(primaryScreenBounds.getWidth() * .43);
-	       	btnBack.setLayoutY(primaryScreenBounds.getHeight() * .87);
-	       	creditPane.getChildren().add(btnBack);
-	      	btnBack.setAlignment(Pos.BOTTOM_RIGHT);
+	       	 //button to for going back to main menu
+	       	 Button btnBack = new Button("Go Back to Main Menu");
+	       	 btnBack.setAlignment(Pos.BOTTOM_CENTER);
+	       	 btnBack.setOpacity(.5);
+	       	 btnBack.setStyle("-fx-border-color: black; -fx-background-color: darkslateblue;");
+	       	 btnBack.setTextFill(Color.MEDIUMSLATEBLUE);
+	       	 btnBack.setFont(CreditFont);
+	       	 btnBack.setLayoutX(primaryScreenBounds.getWidth() * .43);
+	       	 btnBack.setLayoutY(primaryScreenBounds.getHeight() * .87);
+	       	 creditPane.getChildren().add(btnBack);
+	      	 btnBack.setAlignment(Pos.BOTTOM_RIGHT);
 	          
-	      		//button action
-	      		btnBack.setOnAction(new EventHandler<ActionEvent>()
-	      		{
-	      			@Override
-	      			public void handle(ActionEvent event) 
-	      			{
-	      				Main.getStage().setScene(scene);
-	      				//Main.getStage().setFullScreen(true);
-	      			}
-	      		});
+	      	 //button action
+	      	 btnBack.setOnAction(new EventHandler<ActionEvent>()
+	      	 {
+	      		 @Override
+	      		 public void handle(ActionEvent event) 
+	      		 {
+	      			 Main.getStage().setScene(scene);
+	      		 }
+	      	 });
 	      });
-         
          
          startPane.getQuitButton().setOnMouseClicked((event -> 
          {
@@ -433,32 +440,41 @@ public class GameEngine
                      BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
                      BackgroundSize.DEFAULT);
              
-             FlowPane fPane = new FlowPane();
-             fPane.setBackground(new Background(imageBG));
-             fPane.setHgap(5);
-             fPane.setAlignment(Pos.BOTTOM_CENTER);
+             Pane pane = new Pane();
+             pane.setBackground(new Background(imageBG));
              
              //no button for confirming quit
              Button btnNo = new Button("No");
-             btnNo.setStyle("-fx-border-color: darkorange; -fx-background-color: coral");
+             btnNo.setStyle("-fx-border-color: darkorange; -fx-background-color: transparent");
              btnNo.setFont(font);
-             btnNo.setOpacity(.5);
-             btnNo.setTextFill(Color.BLACK);
+             btnNo.setOpacity(.7);
+             btnNo.setTextFill(Color.DARKORANGE);
+             btnNo.setLayoutX(257);
+             btnNo.setLayoutY(258);
 
              //yes button for confirming quit
              Button btnYes = new Button("Yes");
-             btnYes.setStyle("-fx-border-color: darkorange; -fx-background-color: coral");
+             btnYes.setStyle("-fx-border-color: darkorange; -fx-background-color: transparent");
              btnYes.setFont(font);
-             btnYes.setOpacity(0.5);
-             btnYes.setTextFill(Color.BLACK);
+             btnYes.setOpacity(.7);
+             btnYes.setTextFill(Color.DARKORANGE);
+             btnYes.setLayoutX(163);
+             btnYes.setLayoutY(258);
+             
+             Label query = new Label("Are you sure you want to quit?");
+             query.setFont(font);
+             query.setTextFill(Color.DARKORANGE);
+             query.setOpacity(.7);
+             query.setLayoutY(0);
+             query.setLayoutX(70);
 
-            fPane.getChildren().addAll(btnYes, btnNo);
-     		Scene quitScene = new Scene(fPane, 498, 317);
-     		quitWindow.setScene(quitScene);
-     		quitWindow.setTitle("Quit Window");
-     		quitWindow.show();
+             pane.getChildren().addAll(btnYes, btnNo, query);
+     		 Scene quitScene = new Scene(pane, 498, 315);
+     		 quitWindow.setScene(quitScene);
+     		 quitWindow.setTitle("Quit Window");
+     		 quitWindow.show();
 
-             btnNo.setOnMouseClicked((e) -> {
+              btnNo.setOnMouseClicked((e) -> {
             	 quitWindow.close();
                  Main.getStage().setScene(scene);
              });
@@ -533,12 +549,34 @@ public class GameEngine
      
      public void displayDeath()
      {
-    	 Font deathFont = new Font("Comic Sans MS", primaryScreenBounds.getHeight() * .03472);
+    	 Font deathFont = new Font("Comic Sans MS", primaryScreenBounds.getHeight() * .05);
     	 deathLbl = new Label("You died! Press 'P' to unpause");
     	 deathLbl.setFont(deathFont);
-    	 deathLbl.setTextFill(Color.INDIANRED);
-    	 deathLbl.setLayoutX(primaryScreenBounds.getWidth() / 3);
+    	 if (enemy.getBossLevel() == 1)
+    	 	deathLbl.setTextFill(Color.SPRINGGREEN);
+    	 if (enemy.getBossLevel() == 2)
+    		 deathLbl.setTextFill(Color.DARKSLATEGREY);
+    	 if (enemy.getBossLevel() == 3)
+    		 deathLbl.setTextFill(Color.PALEGOLDENROD);
+    	 deathLbl.setLayoutX(primaryScreenBounds.getWidth() / 3.6);
     	 deathLbl.setOpacity(1);
     	 gamePane.getChildren().add(deathLbl);
+     }
+     
+     public void displayVictory()
+     {
+    	 Font vicFont = new Font("Comic Sans MS", primaryScreenBounds.getHeight() * .09);
+    	 vicLbl = new Label("Victory! Prepare for fight " + enemy.getBossLevel() + "...");
+    	 vicLbl.setFont(vicFont);
+    	 if (enemy.getBossLevel() == 1)
+    		 vicLbl.setTextFill(Color.SPRINGGREEN);
+    	 if (enemy.getBossLevel() == 2)
+    	 	vicLbl.setTextFill(Color.PINK);
+    	 if (enemy.getBossLevel() == 3)
+    		 vicLbl.setTextFill(Color.PALEGOLDENROD);
+    	 vicLbl.setLayoutX(primaryScreenBounds.getWidth() / 5.3);
+    	 vicLbl.setLayoutY(primaryScreenBounds.getHeight() / 3);
+    	 vicLbl.setOpacity(1);
+    	 gamePane.getChildren().add(vicLbl);
      }
 }
