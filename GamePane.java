@@ -1,4 +1,4 @@
-package application;
+package AoJGame;
 
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
