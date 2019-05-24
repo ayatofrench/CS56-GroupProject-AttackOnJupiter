@@ -17,8 +17,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Screen;
 
 
-public class StartMenuPane extends Group {
-
+public class StartMenuPane extends Group 
+{
     private GameEngine game;
     private Button btnPlay;
     private Button btnQuit;
