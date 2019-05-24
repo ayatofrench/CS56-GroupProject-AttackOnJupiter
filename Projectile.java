@@ -19,7 +19,7 @@ public class Projectile extends Rectangle
 	{
 		this.direction = direction;
 		this.setWidth(40);
-		this.setHeight(40);
+		this.setHeight(10);
 		this.setX(x);
 		this.setY(y);
 		if (((this.getY()) + (this.getHeight())) > (GROUNDLEVEL))
