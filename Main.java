@@ -2,6 +2,7 @@ package AoJGame;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class Main extends Application 
 {
@@ -17,6 +18,7 @@ public class Main extends Application
     {
         stage = primaryStage;
         GameEngine engine = new GameEngine();
+        //stage.initStyle(StageStyle.UNDECORATED);
         stage.setTitle("Game Test");
         //stage.setFullScreen(true);
         stage.setMaximized(true);
