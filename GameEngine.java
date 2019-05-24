@@ -16,12 +16,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class GameEngine 
 {
-
     private GamePane gamePane;
     private StartMenuPane startPane;
     private Scene scene;
@@ -34,8 +35,10 @@ public class GameEngine
     private Rectangle background = new Rectangle(primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
     private Rectangle backgroundCredits = new Rectangle(primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
     private Rectangle backgroundHTP = new Rectangle(primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
+    private Rectangle healthBar = new Rectangle(180, 35);
     private RangedCharacter lisa;
     private NPC enemy;
+    private Label deathLbl = new Label();
     private boolean paused = false;
     private double gravity = 0;
     private double prevPos = 0;
@@ -44,6 +47,7 @@ public class GameEngine
      {
         startPane = new StartMenuPane();
         gameLoop = gameLoop();
+        deathLbl.setOpacity(0);
 
         input = new ArrayList<>();
 
@@ -51,54 +55,12 @@ public class GameEngine
 
         btnListener();
      }
-
-     public void initGameTwo() 
-     {
-    	 gamePane = new GamePane();
-    	 gamePane.getChildren().clear();
-    	 
-    	 //Initializing fighters
-    	 lisa = new RangedCharacter();
-    	 enemy = new NPC();
-    	 enemy.setBossLevel(2);
-    	 
-    	 //Setting enemies
-    	 lisa.setEnemy(enemy);
-    	 enemy.setEnemy(lisa);
-    	 //enemy.setFill(gsP);
-    	 
-         //Add character and ground to game
-         gamePane.getChildren().addAll(background, lisa, enemy, ground);
-
-         //Create game scene
-         gameScene = new Scene(gamePane, primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
-
-         //Initialize setting
-         createSetting();
-         
-         //Initialize ground
-         createGround();
-
-         //Give character game instance
-         lisa.setGame(this);
-         enemy.setGame(this);
-
-         //Set keybindings
-         keyListener();
-
-         //Start the game loop
-         gameLoop.start();
-
-         //Add game scene to Stage
-         Main.getStage().setScene(gameScene);
-         Main.getStage().setFullScreenExitHint("NetBeans is trash");
-         Main.getStage().setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-         Main.getStage().setFullScreen(true);
-     }
-
      
      public void initGame() 
      {
+    	 Font creditFont = new Font("Comic Sans MS", primaryScreenBounds.getHeight() * .03472);
+	       	
+    	 //Initializng game pane
     	 gamePane = new GamePane();
     	 gamePane.getChildren().clear();
     	 
@@ -111,8 +73,24 @@ public class GameEngine
     	 lisa.setEnemy(enemy);
     	 enemy.setEnemy(lisa);
     	 
+    	 //Health bars
+    	 Label lisaHealthBar = new Label("Player One's Health:");
+    	 //lisaHealthBar.setOpacity(.7);
+    	 lisaHealthBar.setTextFill(Color.YELLOWGREEN);
+    	 lisaHealthBar.setFont(creditFont);
+    	 lisaHealthBar.setLayoutX(enemy.getHealthBar().getX() * .78);
+    	 lisaHealthBar.setLayoutY(enemy.getHealthBar().getY() - enemy.getHealthBar().getHeight());
+    	 
+    	 Label enemyHealthBar = new Label("Metal Meta Man's Health:");
+    	 //enemyHealthBar.setOpacity(.7);
+    	 enemyHealthBar.setTextFill(Color.LIGHTGREY);
+    	 enemyHealthBar.setFont(creditFont);
+    	 enemyHealthBar.setLayoutX(lisa.getHealthBar().getX() * .88);
+    	 enemyHealthBar.setLayoutY(lisa.getHealthBar().getY() - lisa.getHealthBar().getY());
+    	 
          //Add character and ground to game
-         gamePane.getChildren().addAll(background, lisa, enemy, ground);
+         gamePane.getChildren().addAll(background, lisa.getHealthBar(), enemy.getHealthBar(), lisaHealthBar,
+        		 enemyHealthBar, lisa, enemy, ground);
 
          //Create game scene
          gameScene = new Scene(gamePane, primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
@@ -140,69 +118,199 @@ public class GameEngine
          Main.getStage().setFullScreen(true);
      }
      
-     public AnimationTimer gameLoop() 
-    {
-        return gameLoop = new AnimationTimer() 
-        {
-            @Override
-            public void handle(long now) {
-            	
-            	if (lisa.getSleepTime() != 0)
-            		lisa.setSleepTime(lisa.getSleepTime() - 1);
-            	if (enemy.getSleepTime() != 0)
-            		enemy.setSleepTime(enemy.getSleepTime() - 1);
-                lisa.handleMovement(input);
-                enemy.handleMovement(input);
-            }
-        };
-    }
-
-     private void keyListener() 
+     public void initGameTwo() 
      {
-    	gameScene.setOnKeyTyped((event) ->
-    	{
-    		String code = event.getCode().toString();
-    		
-    		if (lisa.isShooting() && input.contains("RIGHT"))
-    		{
-    			
-    			input.remove(code);
-    		}
-        	
-        	if (lisa.isShooting() && input.contains("LEFT"))
-            	input.remove(code);
-        	
-        	if(input.contains("ESCAPE"))
-        		Main.getStage().setFullScreen(false);
-    	});
-    	
-        gameScene.setOnKeyPressed((event) -> 
-        {
-        	String code = event.getCode().toString();
+    	 Font creditFont = new Font("Comic Sans MS", primaryScreenBounds.getHeight() * .03472);
+    	 
+    	 //Initializing game pane
+    	 gamePane = new GamePane();
+    	 gamePane.getChildren().clear();
+    	 
+    	 //Initializing fighters
+    	 lisa = new RangedCharacter();
+    	 enemy = new NPC();
+    	 enemy.setBossLevel(2);
+    	 
+    	 //Setting enemies
+    	 lisa.setEnemy(enemy);
+    	 enemy.setEnemy(lisa);
+    	 
+    	 //Health bars
+    	 Label lisaHealthBar = new Label("Player One's Health:");
+    	 //lisaHealthBar.setOpacity(.7);
+    	 lisaHealthBar.setTextFill(Color.YELLOWGREEN);
+    	 lisaHealthBar.setFont(creditFont);
+    	 lisaHealthBar.setLayoutX(enemy.getHealthBar().getX() * .78);
+    	 lisaHealthBar.setLayoutY(enemy.getHealthBar().getY() - enemy.getHealthBar().getHeight());
+    	 
+    	 Label enemyHealthBar = new Label("Metal Meta Man's Health:");
+    	 //enemyHealthBar.setOpacity(.7);
+    	 enemyHealthBar.setTextFill(Color.LIGHTGREY);
+    	 enemyHealthBar.setFont(creditFont);
+    	 enemyHealthBar.setLayoutX(lisa.getHealthBar().getX() * .88);
+    	 enemyHealthBar.setLayoutY(lisa.getHealthBar().getY() - lisa.getHealthBar().getY());
+    	 
+    	 gamePane.getChildren().addAll(background, lisa.getHealthBar(), enemy.getHealthBar(), lisaHealthBar,
+        		 enemyHealthBar, lisa, enemy, ground);
+
+         //Create game scene
+         gameScene = new Scene(gamePane, primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
         
-        	if(!input.contains(code))
-                	input.add(code);
+         //Initialize setting
+         createSetting();
+         
+         //Initialize ground
+         createGround();
 
-        	if(input.contains("SPACE")) {
-                lisa.jump();
-        	}
-            
-        	if (input.contains("F12"))
-        		Main.getStage().setFullScreen(true);
-            
-        	if(input.contains("P")) {
-        		pauseGame();
-        }
-            
-        lisa.setPrevXPos(lisa.getX());
-    });
+         //Give character game instance
+         lisa.setGame(this);
+         enemy.setGame(this);
 
-        gameScene.setOnKeyReleased((event) -> {
-            String code = event.getCode().toString();
+         //Set keybindings
+         keyListener();
 
-            input.remove(code);
-        });
-    }
+         //Start the game loop
+         gameLoop.start();
+
+         //Add game scene to Stage
+         Main.getStage().setScene(gameScene);
+         Main.getStage().setFullScreenExitHint("NetBeans is trash");
+         Main.getStage().setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+         Main.getStage().setFullScreen(true);
+     }
+     
+     public void initGameThree() 
+     {
+    	 Font creditFont = new Font("Comic Sans MS", primaryScreenBounds.getHeight() * .03472);
+    	 
+    	 gamePane = new GamePane();
+    	 gamePane.getChildren().clear();
+    	 
+    	 //Initializing fighters
+    	 lisa = new RangedCharacter();
+    	 enemy = new NPC();
+    	 enemy.setBossLevel(3);
+    	 
+    	 //Setting enemies
+    	 lisa.setEnemy(enemy);
+    	 enemy.setEnemy(lisa);
+    	 
+    	 //Health bars
+    	 Label lisaHealthBar = new Label("Player One's Health:");
+    	 //lisaHealthBar.setOpacity(.7);
+    	 lisaHealthBar.setTextFill(Color.YELLOWGREEN);
+    	 lisaHealthBar.setFont(creditFont);
+    	 lisaHealthBar.setLayoutX(enemy.getHealthBar().getX() * .78);
+    	 lisaHealthBar.setLayoutY(enemy.getHealthBar().getY() - enemy.getHealthBar().getHeight());
+    	 
+    	 Label enemyHealthBar = new Label("Metal Meta Man's Health:");
+    	 //enemyHealthBar.setOpacity(.7);
+    	 enemyHealthBar.setTextFill(Color.LIGHTGREY);
+    	 enemyHealthBar.setFont(creditFont);
+    	 enemyHealthBar.setLayoutX(lisa.getHealthBar().getX() * .88);
+    	 enemyHealthBar.setLayoutY(lisa.getHealthBar().getY() - lisa.getHealthBar().getY());
+    	 
+         //Add character and ground to game
+    	 gamePane.getChildren().addAll(background, lisa.getHealthBar(), enemy.getHealthBar(), lisaHealthBar,
+        		 enemyHealthBar, lisa, enemy, ground);
+
+         //Create game scene
+         gameScene = new Scene(gamePane, primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
+
+         //Initialize setting
+         createSetting();
+         
+         //Initialize ground
+         createGround();
+
+         //Give character game instance
+         lisa.setGame(this);
+         enemy.setGame(this);
+         
+         //Set keybindings
+         keyListener();
+         
+         //Start the game loop
+         gameLoop.start();
+
+         //Add game scene to Stage
+         Main.getStage().setScene(gameScene);
+         Main.getStage().setFullScreenExitHint("NetBeans is trash");
+         Main.getStage().setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+         Main.getStage().setFullScreen(true);
+     }
+     
+     public AnimationTimer gameLoop() 
+     { 
+    	 return gameLoop = new AnimationTimer() 
+    	 {
+    		 @Override
+    		 public void handle(long now) 
+    		 {
+    			 if (deathLbl.getOpacity() > .01)
+    				 deathLbl.setOpacity(deathLbl.getOpacity() - .01);
+    			 
+    			 else if (deathLbl.getOpacity() <= .01)
+    			 {
+    				 deathLbl.setOpacity(0);
+    				 gamePane.getChildren().remove(deathLbl);
+    			 }
+            	
+    			 if (lisa.getSleepTime() != 0)
+    				 lisa.setSleepTime(lisa.getSleepTime() - 1);
+    			 if (enemy.getSleepTime() != 0)
+    				 enemy.setSleepTime(enemy.getSleepTime() - 1);
+    			 lisa.handleMovement(input);
+    			 enemy.handleMovement(input);
+    		 }
+    	 };
+     }	
+     
+     private void keyListener() 
+     { 
+    	 gameScene.setOnKeyTyped((event) ->
+    	 {
+    		 String code = event.getCode().toString();
+    		
+    		 if (lisa.isShooting() && input.contains("RIGHT"))
+    			 input.remove(code);
+        	
+    		 if (lisa.isShooting() && input.contains("LEFT"))
+    			 input.remove(code);
+        	
+    		 if(input.contains("ESCAPE"))
+    			 Main.getStage().setFullScreen(false);
+    	 });
+    	
+    	 gameScene.setOnKeyPressed((event) -> 
+    	 {
+    		 String code = event.getCode().toString();
+        
+    		 if(!input.contains(code))
+    			 input.add(code);
+
+    		 if(input.contains("SPACE")) 
+    		 {
+    			 lisa.jump();
+    		 }
+            
+    		 if (input.contains("F12"))
+    			 Main.getStage().setFullScreen(true);
+            
+    		 if(input.contains("P")) 
+    		 {
+    			 pauseGame();
+    		 }
+            
+    		 lisa.setPrevXPos(lisa.getX());
+    	 });
+
+    	 gameScene.setOnKeyReleased((event) -> {
+    		 String code = event.getCode().toString();
+
+    		 input.remove(code);
+    	 });
+     }
 
      private void btnListener() {
          startPane.getPlayButton().setOnMouseClicked((event) -> {
@@ -212,22 +320,23 @@ public class GameEngine
          startPane.getHTPButton().setOnMouseClicked(((event) -> 
          {
         	 Stage htpWindow = new Stage();
+        	 htpWindow.initStyle(StageStyle.UNDECORATED);
              //BackgroundImage imageBG = new BackgroundImage(new Image("file:Pictures/HowToPlay.png"), 
         	//BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
         	     //BackgroundSize.DEFAULT);
-                           backgroundHTP.setWidth(1100);
-                  backgroundHTP.setHeight(582);
-                  Image setting = new Image("file:Pictures/menu/HowToPlay.png");
-                  ImagePattern settingP = new ImagePattern(setting);
-                  backgroundHTP.setFill(settingP);
+        	 backgroundHTP.setWidth(1100);
+             backgroundHTP.setHeight(582);
+             Image setting = new Image("file:Pictures/menu/HowToPlay.png");
+             ImagePattern settingP = new ImagePattern(setting);
+             backgroundHTP.setFill(settingP);
                   
              Pane htpPane=new Pane();
-                      htpPane.getChildren().add(backgroundHTP);
+             htpPane.getChildren().add(backgroundHTP);
              Scene htpScene=new Scene(htpPane,1100,582);
              htpWindow.setScene(htpScene);
              Button btnBack = new Button("Go Back to Main Menu");
                       
-                      btnBack.setLayoutX(1100*.39);
+             btnBack.setLayoutX(1100*.39);
              btnBack.setStyle("-fx-border-color: black; -fx-background-color: transparent;");
              btnBack.setTextFill(Color.BLACK);
                       
@@ -317,6 +426,8 @@ public class GameEngine
          startPane.getQuitButton().setOnMouseClicked((event -> 
          {
         	 Stage quitWindow = new Stage();
+        	 quitWindow.initStyle(StageStyle.UNDECORATED);
+        	 quitWindow.setOpacity(1);
              Font font = new Font("Times New Roman", 30);
              BackgroundImage imageBG = new BackgroundImage(new Image("file:Pictures/menu/AoJTerror.gif"),
                      BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,
@@ -367,39 +478,43 @@ public class GameEngine
             paused = false;
         }
     }
-
+     
      private void createSetting()
-    {
-    	Image settingRain = new Image("file:Pictures/scene/rain_back.gif");
-        ImagePattern settingRainP = new ImagePattern(settingRain);
-        
+     {	
+    	 Image settingDay = new Image("file:Pictures/scene/back_day.gif");
+    	 ImagePattern settingDayP = new ImagePattern(settingDay);
+         
+    	 Image settingRain = new Image("file:Pictures/scene/rain_back.gif");
+    	 ImagePattern settingRainP = new ImagePattern(settingRain);
        
-        Image settingNight = new Image("file:Pictures/scene/dark_ground_back.gif");
-        ImagePattern settingNightP = new ImagePattern(settingNight);
+    	 Image settingNight = new Image("file:Pictures/scene/dark_ground_back.gif");
+    	 ImagePattern settingNightP = new ImagePattern(settingNight);
         
-        if (enemy.getBossLevel() == 1)
-        	background.setFill(settingRainP);
+    	 if (enemy.getBossLevel() == 1)
+    		 background.setFill(settingDayP);
         
-        if (enemy.getBossLevel() == 2)
-        	background.setFill(settingNightP);
-    }
+    	 if (enemy.getBossLevel() == 2)
+    		 background.setFill(settingRainP);
+        
+    	 if (enemy.getBossLevel() == 3)
+    		 background.setFill(settingNightP);
+     }
     
      private void createGround() 
-    {
-        ground.setFill(Color.BLACK);
-        ground.setStroke(Color.ORANGE);
-        ground.setOpacity(0);
-        ground.setWidth(scene.getWidth());
-        ground.setX(0);
-        ground.setHeight(1);
-        ground.setY(GROUNDLEVEL);
-
-    }
+     {
+    	 ground.setFill(Color.BLACK);
+    	 ground.setStroke(Color.ORANGE);
+    	 ground.setOpacity(0);
+    	 ground.setWidth(scene.getWidth());
+    	 ground.setX(0);
+    	 ground.setHeight(1);
+    	 ground.setY(GROUNDLEVEL);
+     }
 
      public Scene getScene() 
-    {
-        return scene;
-    }
+     {
+    	 return scene;
+     }
 
      public GamePane getGamePane()
      {
@@ -407,20 +522,23 @@ public class GameEngine
      }
      
      public Rectangle getGround() 
-    {
-         return ground;
-    }
+     {
+    	 return ground;
+     }
     
      public Rectangle getSetting()
-    {
-    	return this.background;
-    }
-
-     private void displayDeath()
      {
-    	 Font deathFont = new Font("Comic Sans MS", 25);
-    	 Label lbl = new Label("There was a death!");
-    	 lbl.setFont(deathFont);
-    	 
+    	 return this.background;
+     }
+     
+     public void displayDeath()
+     {
+    	 Font deathFont = new Font("Comic Sans MS", primaryScreenBounds.getHeight() * .03472);
+    	 deathLbl = new Label("You died! Press 'P' to unpause");
+    	 deathLbl.setFont(deathFont);
+    	 deathLbl.setTextFill(Color.INDIANRED);
+    	 deathLbl.setLayoutX(primaryScreenBounds.getWidth() / 3);
+    	 deathLbl.setOpacity(1);
+    	 gamePane.getChildren().add(deathLbl);
      }
 }
