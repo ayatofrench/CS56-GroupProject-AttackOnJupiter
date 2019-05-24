@@ -24,6 +24,8 @@ public class Character extends Rectangle
     protected int maxPosition;
     protected boolean shooting = false;
     protected int sleepTime = 0;
+    protected Rectangle healthBar = new Rectangle(((180 / primaryScreenBounds.getWidth()) * 
+    		primaryScreenBounds.getWidth()), 35);
     
     public Character() 
     {
@@ -172,4 +174,14 @@ public class Character extends Rectangle
 	{
         return new javafx.geometry.Rectangle2D(posX, posY, width, height);
     }
+    
+    public void setHealthBar(Rectangle healthBar)
+	{
+		this.healthBar = healthBar;
+	}
+	
+	public Rectangle getHealthBar()
+	{
+		return this.healthBar;
+	}
 }
