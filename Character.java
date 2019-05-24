@@ -24,8 +24,7 @@ public class Character extends Rectangle
     protected int maxPosition;
     protected boolean shooting = false;
     protected int sleepTime = 0;
-    protected Rectangle healthBar = new Rectangle(((180 / primaryScreenBounds.getWidth()) * 
-    		primaryScreenBounds.getWidth()), 35);
+    protected Rectangle healthBar = new Rectangle(.25 * primaryScreenBounds.getWidth(), 35);
     
     public Character() 
     {
