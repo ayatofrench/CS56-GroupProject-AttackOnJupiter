@@ -41,7 +41,7 @@ public class RangedCharacter extends Character
 		this.setHealth(120);
 		this.setWidth(primaryScreenBounds.getWidth() * .15);
 		this.setHeight(primaryScreenBounds.getHeight()*(.25));
-        //this.setStroke(Color.GREEN);
+        this.setStroke(Color.GREEN);
 		this.setX(0);
 		this.setY(primaryScreenBounds.getHeight()*(.84));
 		maxPosition = (int)(primaryScreenBounds.getWidth() - this.getWidth());
@@ -49,39 +49,12 @@ public class RangedCharacter extends Character
 			maxPosition--;
 		
 		healthBar.setWidth(180);
-		//if (((NPC)(this.getEnemy())).getBossLevel() == 1)
-			healthBar.setFill(Color.LIGHTGREY);
+		healthBar.setFill(Color.LIGHTGREY);
 		healthBar.setX(primaryScreenBounds.getWidth() - healthBar.getWidth());
    	 	healthBar.setY(healthBar.getHeight());
    	 	healthBar.setOpacity(.5);
    	 	healthBar.setStroke(Color.BLACK);
-	}
-	
-	public RangedCharacter(int bossLevel)
-	{
-		this.sleepTime = 0;
-        this.setFill(archerRightP);
-		this.setDirection("right");
-		this.setHealth(120);
-		this.setWidth(primaryScreenBounds.getWidth() * .15);
-		this.setHeight(primaryScreenBounds.getHeight()*(.25));
-        //this.setStroke(Color.GREEN);
-		this.setX(0);
-		this.setY(primaryScreenBounds.getHeight()*(.84));
-		maxPosition = (int)(primaryScreenBounds.getWidth() - this.getWidth());
-		while(maxPosition % 5 != 0)
-			maxPosition--;
-		
-		healthBar.setWidth(180);
-		if (bossLevel == 1)
-			healthBar.setFill(Color.LIGHTGREY);
-		healthBar.setX(primaryScreenBounds.getWidth() - healthBar.getWidth());
-   	 	healthBar.setY(healthBar.getHeight());
-   	 	healthBar.setOpacity(.5);
-   	 	healthBar.setStroke(Color.BLACK);
-	}
-	
-	
+	}	
 	
 	public void shoot()
 	{
