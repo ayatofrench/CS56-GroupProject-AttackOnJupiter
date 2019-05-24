@@ -35,11 +35,13 @@ public class Projectile extends Rectangle
 	
 	public void launchRight()
 	{
+		this.direction = "right";
 		this.setX(this.getX() + MOVEMENTSPEED);
 	}
 	
 	public void launchLeft()
 	{
+		this.direction = "left";
 		this.setX(this.getX() - MOVEMENTSPEED);
 	}
 }
